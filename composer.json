@@ -3,7 +3,6 @@
     "description": "Symfony SonataNewsBundle",
     "license": "MIT",
     "type": "symfony-bundle",
-    "abandoned": true,
     "keywords": [
         "blog",
         "sonata",
