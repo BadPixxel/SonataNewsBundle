@@ -13,15 +13,24 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @final since sonata-project/news-bundle 3.x
  */
-class SynchronizeCommentsCountCommand extends ContainerAwareCommand
+final class SynchronizeCommentsCountCommand extends Command
 {
+    protected $container;
+
+    public function __construct(ContainerInterface $container){
+        parent::__construct();
+        $this->container = $container;
+    }
+
+
     public function configure(): void
     {
         $this->setName('sonata:news:sync-comments-count');
@@ -33,7 +42,7 @@ class SynchronizeCommentsCountCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $commentManager = $this->getContainer()->get('sonata.news.manager.comment');
+        $commentManager = $this->container->get('sonata.news.manager.comment');
 
         $commentManager->updateCommentsCount();
 
