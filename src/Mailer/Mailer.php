@@ -20,11 +20,9 @@ use Symfony\Component\Mailer\MailerInterface as SymfonyMailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
-/**
- * @final since sonata-project/news-bundle 3.x
- */
-class Mailer implements MailerInterface
+final class Mailer implements MailerInterface
 {
     /**
      * @var RouterInterface
@@ -32,7 +30,7 @@ class Mailer implements MailerInterface
     protected $router;
 
     /**
-     * @var EngineInterface
+     * @var Environment
      */
     protected $templating;
 
@@ -58,7 +56,7 @@ class Mailer implements MailerInterface
      */
     protected $blog;
 
-    public function __construct(object $mailer, BlogInterface $blog, HashGeneratorInterface $generator, RouterInterface $router, EngineInterface $templating, array $emails)
+    public function __construct(object $mailer, BlogInterface $blog, HashGeneratorInterface $generator, RouterInterface $router, Environment $templating, array $emails)
     {
         // NEXT_MAJOR: Remove the following 2 conditions and use `Symfony\Component\Mailer\MailerInterface` as argument declaration for `$mailer`.
         if (!$mailer instanceof SymfonyMailerInterface && !$mailer instanceof \Swift_Mailer) {

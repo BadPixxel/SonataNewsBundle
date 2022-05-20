@@ -30,24 +30,24 @@ class CommentAdmin extends AbstractAdmin
      */
     protected $commentManager;
 
-    public function getBatchActions()
-    {
-        $actions = parent::getBatchActions();
+    // public function getBatchActions()
+    // {
+    //     $actions = parent::getBatchActions();
 
-        $actions['enabled'] = [
-            'label' => $this->getLabelTranslatorStrategy()->getLabel('enable', 'batch', 'comment'),
-            'translation_domain' => $this->getTranslationDomain(),
-            'ask_confirmation' => false,
-        ];
+    //     $actions['enabled'] = [
+    //         'label' => $this->getLabelTranslatorStrategy()->getLabel('enable', 'batch', 'comment'),
+    //         'translation_domain' => $this->getTranslationDomain(),
+    //         'ask_confirmation' => false,
+    //     ];
 
-        $actions['disabled'] = [
-            'label' => $this->getLabelTranslatorStrategy()->getLabel('disable', 'batch', 'comment'),
-            'translation_domain' => $this->getTranslationDomain(),
-            'ask_confirmation' => false,
-        ];
+    //     $actions['disabled'] = [
+    //         'label' => $this->getLabelTranslatorStrategy()->getLabel('disable', 'batch', 'comment'),
+    //         'translation_domain' => $this->getTranslationDomain(),
+    //         'ask_confirmation' => false,
+    //     ];
 
-        return $actions;
-    }
+    //     return $actions;
+    // }
 
     public function postPersist($object): void
     {

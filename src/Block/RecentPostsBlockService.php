@@ -22,13 +22,12 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\Doctrine\Model\ManagerInterface;
 use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\NewsBundle\Model\PostManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Twig\Environment;
 /**
  * @final since sonata-project/news-bundle 3.x
  *
@@ -50,7 +49,7 @@ class RecentPostsBlockService extends AbstractAdminBlockService
      * @param string $name
      * @param Pool   $adminPool
      */
-    public function __construct($name, EngineInterface $templating, ManagerInterface $postManager, ?Pool $adminPool = null)
+    public function __construct($name, Environment $templating, ManagerInterface $postManager, ?Pool $adminPool = null)
     {
         if (!$postManager instanceof PostManagerInterface) {
             @trigger_error(

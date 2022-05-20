@@ -3,6 +3,7 @@
     <services>
         <service id="Sonata\NewsBundle\Command\SynchronizeCommentsCountCommand" class="Sonata\NewsBundle\Command\SynchronizeCommentsCountCommand" public="true">
             <tag name="console.command"/>
+            <argument type="service" id="service_container"/>
         </service>
     </services>
 </container>
