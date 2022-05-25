@@ -19,6 +19,7 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\Filter\ChoiceType as FilterChoiceType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -31,6 +32,10 @@ use Sonata\NewsBundle\Model\CommentInterface;
 use Sonata\NewsBundle\Permalink\PermalinkInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
+use Sonata\AdminBundle\Form\Type\TemplateType;
+
 
 class PostAdmin extends AbstractAdmin
 {
@@ -142,11 +147,13 @@ class PostAdmin extends AbstractAdmin
             ->with('group_classification', [
                 'class' => 'col-md-4',
                 ])
-                ->add('tags', ModelAutocompleteType::class, [
-                    'property' => 'name',
-                    'multiple' => 'true',
-                    'required' => false,
-                ])
+                // ->add('tags', ModelAutocompleteType::class, [
+                //     'property' => 'name',
+                //     'multiple' => 'true',
+                //     'required' => false,
+                // ])
+                ->add('tags', null, [
+])
                 ->add('collection', ModelListType::class, [
                     'required' => false,
                 ])
@@ -156,7 +163,7 @@ class PostAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('custom', 'string', [
+            ->add('custom', null, [
                 'template' => '@SonataNews/Admin/list_post_custom.html.twig',
                 'label' => 'list.label_post',
                 'sortable' => 'title',
@@ -170,7 +177,8 @@ class PostAdmin extends AbstractAdmin
         $filter
             ->add('title')
             ->add('enabled')
-            ->add('tags', null, ['field_options' => ['expanded' => true, 'multiple' => true]])
+            //->add('tags', null, ['field_options' => ['expanded' => true, 'multiple' => true]])
+            ->add('tags', null, [])
             ->add('author')
             ->add('with_open_comments', CallbackFilter::class, [
 //                'callback'   => array($this, 'getWithOpenCommentFilter'),
