@@ -30,6 +30,7 @@ use Sonata\FormatterBundle\Formatter\Pool as FormatterPool;
 use Sonata\NewsBundle\Form\Type\CommentStatusType;
 use Sonata\NewsBundle\Model\CommentInterface;
 use Sonata\NewsBundle\Permalink\PermalinkInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -53,6 +54,18 @@ class PostAdmin extends AbstractAdmin
      * @var PermalinkInterface
      */
     protected $permalinkGenerator;
+
+    /**
+     * @var ParameterBagInterface
+     */
+    protected $params;
+
+    public function __construct(string $code, string $class, string $baseControllerName, ParameterBagInterface $params)
+    {
+        parent::__construct($code, $class, $baseControllerName);
+        $this->params = $params;
+    }
+
 
     /**
      * @deprecated since sonata-project/news-bundle 3.13, to be removed in 4.0.
@@ -95,12 +108,12 @@ class PostAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
-        $isHorizontal = 'horizontal' === $this->getConfigurationPool()->getOption('form_type');
+        $isHorizontal = 'horizontal' === $this->params->get('sonata.form.form_type');
         $form
             ->with('group_post', [
                     'class' => 'col-md-8',
                 ])
-                ->add('author', ModelListType::class)
+                 ->add('author', ModelListType::class)
                 ->add('title')
                 ->add('abstract', TextareaType::class, [
                     'attr' => ['rows' => 5],
@@ -123,11 +136,11 @@ class PostAdmin extends AbstractAdmin
                 ])
                 ->add('enabled', CheckboxType::class, ['required' => false])
                 ->add('image', ModelListType::class, ['required' => false], [
-                    'link_parameters' => [
-                        'context' => 'news',
-                        'hide_context' => true,
-                    ],
-                ])
+                     'link_parameters' => [
+                         'context' => 'news',
+                         'hide_context' => true,
+                     ],
+                 ])
 
                 ->add('publicationDateStart', DateTimePickerType::class, [
                     'dp_side_by_side' => true,
@@ -147,16 +160,16 @@ class PostAdmin extends AbstractAdmin
             ->with('group_classification', [
                 'class' => 'col-md-4',
                 ])
-                // ->add('tags', ModelAutocompleteType::class, [
-                //     'property' => 'name',
-                //     'multiple' => 'true',
-                //     'required' => false,
-                // ])
+                 ->add('tags', ModelAutocompleteType::class, [
+                     'property' => 'name',
+                     'multiple' => 'true',
+                     'required' => false,
+                 ])
                 ->add('tags', null, [
-])
-                ->add('collection', ModelListType::class, [
-                    'required' => false,
                 ])
+                // ->add('collection', ModelListType::class, [
+                 //    'required' => false,
+                 //])
             ->end();
     }
 
@@ -177,8 +190,7 @@ class PostAdmin extends AbstractAdmin
         $filter
             ->add('title')
             ->add('enabled')
-            //->add('tags', null, ['field_options' => ['expanded' => true, 'multiple' => true]])
-            ->add('tags', null, [])
+            ->add('tags', null, ['field_options' => ['expanded' => true, 'multiple' => true]])
             ->add('author')
             ->add('with_open_comments', CallbackFilter::class, [
 //                'callback'   => array($this, 'getWithOpenCommentFilter'),
