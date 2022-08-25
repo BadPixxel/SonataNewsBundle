@@ -147,7 +147,7 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
 
         $query->setParameters($parameters);
 
-        return (new ORMPaginator($query))->paginate($page);
+        return (new ORMPaginator($query))->paginate(intval($page));
     }
 
     /**
