@@ -36,7 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\AdminBundle\Form\Type\TemplateType;
-
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PostAdmin extends AbstractAdmin
 {
@@ -60,10 +60,16 @@ class PostAdmin extends AbstractAdmin
      */
     protected $params;
 
-    public function __construct(string $code, string $class, string $baseControllerName, ParameterBagInterface $params)
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    public function __construct(string $code, string $class, string $baseControllerName, ParameterBagInterface $params, TranslatorInterface $translator)
     {
         parent::__construct($code, $class, $baseControllerName);
         $this->params = $params;
+        $this->translator = $translator;
     }
 
 
@@ -218,12 +224,12 @@ class PostAdmin extends AbstractAdmin
         $id = $admin->getRequest()->get('id');
 
         $menu->addChild(
-            $this->trans('sidemenu.link_edit_post'),
+            $this->translator->trans('sidemenu.link_edit_post'),
             ['uri' => $admin->generateUrl('edit', ['id' => $id])]
         );
 
         $menu->addChild(
-            $this->trans('sidemenu.link_view_comments'),
+            $this->translator->trans('sidemenu.link_view_comments'),
             ['uri' => $admin->generateUrl('sonata.news.admin.comment.list', ['id' => $id])]
         );
 
