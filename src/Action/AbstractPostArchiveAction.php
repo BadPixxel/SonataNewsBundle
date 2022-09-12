@@ -104,7 +104,7 @@ abstract class AbstractPostArchiveAction extends AbstractController
         }
 
         if ('xml' === $request->getRequestFormat()) {
-            $response->headers->set('Content-Type', 'application/rss+xml');
+            $response->headers->set('Content-Type', 'application/xml');
         }
 
         return $response;
