@@ -6,7 +6,7 @@
     <route id="sonata_news_archive_daily" path="/archive/{year}/{month}/{day}.{_format}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\DailyPostArchiveAction</default>
         <default key="_format">html</default>
-        <requirement key="_format">html|rss</requirement>
+        <requirement key="_format">html|rss|xml</requirement>
         <requirement key="year">\d+</requirement>
         <requirement key="month">\d+</requirement>
         <requirement key="day">\d+</requirement>
@@ -14,30 +14,30 @@
     <route id="sonata_news_archive_monthly" path="/archive/{year}/{month}.{_format}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\MonthlyPostArchiveAction</default>
         <default key="_format">html</default>
-        <requirement key="_format">html|rss</requirement>
+        <requirement key="_format">html|rss|xml</requirement>
         <requirement key="year">\d+</requirement>
         <requirement key="month">\d+</requirement>
     </route>
     <route id="sonata_news_tag" path="/tag/{tag}.{_format}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\TagPostArchiveAction</default>
         <default key="_format">html</default>
-        <requirement key="_format">html|rss</requirement>
+        <requirement key="_format">html|rss|xml</requirement>
     </route>
     <route id="sonata_news_collection" path="/collection/{collection}.{_format}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\CollectionPostArchiveAction</default>
         <default key="_format">html</default>
-        <requirement key="_format">html|rss</requirement>
+        <requirement key="_format">html|rss|xml</requirement>
     </route>
     <route id="sonata_news_archive_yearly" path="/archive/{year}.{_format}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\YearlyPostArchiveAction</default>
         <default key="_format">html</default>
-        <requirement key="_format">html|rss</requirement>
+        <requirement key="_format">html|rss|xml</requirement>
         <requirement key="year">\d+</requirement>
     </route>
     <route id="sonata_news_archive" path="/archive.{_format}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\PostArchiveAction</default>
         <default key="_format">html</default>
-        <requirement key="_format">html|rss</requirement>
+        <requirement key="_format">html|rss|xml</requirement>
     </route>
     <route id="sonata_news_comment_moderation" path="/comment/moderation/{commentId}/{hash}/{status}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\ModerateCommentAction</default>
@@ -45,7 +45,7 @@
     <route id="sonata_news_view" path="/{permalink}.{_format}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\ViewPostAction</default>
         <default key="_format">html</default>
-        <requirement key="_format">html|rss</requirement>
+        <requirement key="_format">html|rss|xml</requirement>
         <requirement key="permalink">.+?</requirement>
     </route>
     <route id="sonata_news_home" path="/" methods="GET">

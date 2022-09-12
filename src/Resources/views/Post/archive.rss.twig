@@ -8,20 +8,27 @@
  * file that was distributed with this source code.
  */
 #}
-<?xml version="1.0" ?>
-<rss version="2.0">
-    <channel>
-        <title>{{ blog.title }}{%if tag %} : {{ tag.name }}{%endif%}</title>
-        <link>{{ blog.link }}</link>
-        <description>{{ blog.description }}</description>
-        {% for post in pager.getResults() %}
-             <item>
-                  <title>{{ post.title }}</title>
-                  <link>{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }, true) }}</link>
-                  <description><![CDATA[ {{ post.abstract }} ]]></description>
-                  <pubDate>{{ post.publicationDateStart | date('Y-m-d\\TH:i:sP', 'UTC') }}</pubDate>
-                  <guid>{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }, true) }}</guid>
-             </item>
-        {% endfor %}
-    </channel>
-</rss>
+<?xml version="1.0"?>
+	<rss version="2.0">
+		<channel>
+			<title>{{ blog.title }}
+			{%if tag %}:{{ tag.name }}{%endif%}</title>
+			<link>{{ blog.link }}</link>
+			<description>{{ blog.description }}</description>
+			<pubDate>{{ 'now'|date('D, d M Y H:i:s O', 'UTC') }}</pubDate>
+			<lastBuildDate>{{ 'now'|date('D, d M Y H:i:s O', 'UTC') }}</lastBuildDate>
+			<link>{{ blog.link }}</link>
+			{% for post in pager.getResults() %}
+				<item>
+					<title>{{ post.title }}</title>
+					<link>{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }, true) }}</link>
+					<description>
+						<![CDATA[ {{ post.abstract }} ]]>
+					</description>
+					<pubDate>{{ post.publicationDateStart | date('D, d M Y H:i:s O', 'UTC') }}</pubDate>
+					<enclosure type="image/jpeg" length="727618" url="{{ sonata_path(post.image, 'large') }}"/>
+					<guid>{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }, true) }}</guid>
+				</item>
+			{% endfor %}
+		</channel>
+	</rss>
