@@ -17,7 +17,6 @@
 			<description>{{ blog.description }}</description>
 			<pubDate>{{ 'now'|date('D, d M Y H:i:s O', 'UTC') }}</pubDate>
 			<lastBuildDate>{{ 'now'|date('D, d M Y H:i:s O', 'UTC') }}</lastBuildDate>
-			<link>{{ blog.link }}</link>
 			{% for post in pager.getResults() %}
 				<item>
 					<title>{{ post.title }}</title>
