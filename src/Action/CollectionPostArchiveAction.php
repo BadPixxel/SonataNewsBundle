@@ -14,12 +14,9 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Action;
 
 use Sonata\ClassificationBundle\Model\CollectionManagerInterface;
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Sonata\NewsBundle\Model\{BlogInterface,PostManagerInterface};
+use Symfony\Component\HttpFoundation\{Request,Response};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Translation\TranslatorInterface as LegacyTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class CollectionPostArchiveAction extends AbstractPostArchiveAction
@@ -27,30 +24,28 @@ final class CollectionPostArchiveAction extends AbstractPostArchiveAction
     /**
      * @var CollectionManagerInterface
      */
-    private $collectionManager;
+    private CollectionManagerInterface $collectionManager;
 
     /**
-     * NEXT_MAJOR: Remove usage of LegacyTranslator.
-     *
-     * @param TranslatorInterface|LegacyTranslator $translator
+     * @param BlogInterface $blog
+     * @param PostManagerInterface $postManager
+     * @param TranslatorInterface $translator
+     * @param CollectionManagerInterface $collectionManager
      */
-    public function __construct(
-        BlogInterface $blog,
-        PostManagerInterface $postManager,
-        object $translator,
-        CollectionManagerInterface $collectionManager
-    ) {
+    public function __construct(BlogInterface $blog, PostManagerInterface $postManager, TranslatorInterface $translator,
+        CollectionManagerInterface $collectionManager)
+    {
         parent::__construct($blog, $postManager, $translator);
 
         $this->collectionManager = $collectionManager;
     }
 
     /**
+     * @param Request $request
      * @param string $collection
-     *
      * @return Response
      */
-    public function __invoke(Request $request, $collection)
+    public function __invoke(Request $request, string $collection): Response
     {
         $collection = $this->collectionManager->findOneBy([
             'slug' => $collection,

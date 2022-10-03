@@ -20,29 +20,30 @@ class Blog implements BlogInterface
     /**
      * @var string
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @var string
      */
-    protected $link;
+    protected string $link;
 
     /**
      * @var string
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var PermalinkInterface
      */
-    protected $permalinkGenerator;
+    protected PermalinkInterface $permalinkGenerator;
 
     /**
      * @param string $title
      * @param string $link
      * @param string $description
+     * @param PermalinkInterface $permalinkGenerator
      */
-    public function __construct($title, $link, $description, PermalinkInterface $permalinkGenerator)
+    public function __construct(string $title, string $link, string $description, PermalinkInterface $permalinkGenerator)
     {
         $this->title = $title;
         $this->link = $link;
@@ -50,37 +51,61 @@ class Blog implements BlogInterface
         $this->permalinkGenerator = $permalinkGenerator;
     }
 
-    public function getPermalinkGenerator()
+    /**
+     * @return PermalinkInterface
+     */
+    public function getPermalinkGenerator(): PermalinkInterface
     {
         return $this->permalinkGenerator;
     }
 
-    public function setDescription($description): void
+    /**
+     * @param string $description
+     * @return void
+     */
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    public function getDescription()
+    /**
+     * @return string
+     */
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setLink($link): void
+    /**
+     * @param string $link
+     * @return void
+     */
+    public function setLink(string $link): void
     {
         $this->link = $link;
     }
 
-    public function getLink()
+    /**
+     * @return string
+     */
+    public function getLink(): string
     {
         return $this->link;
     }
 
-    public function setTitle($title): void
+    /**
+     * @param string $title
+     * @return void
+     */
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    public function getTitle()
+    /**
+     * @return string
+     */
+    public function getTitle(): string
     {
         return $this->title;
     }

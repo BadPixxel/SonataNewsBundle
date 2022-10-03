@@ -14,41 +14,43 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Action;
 
 use Sonata\IntlBundle\Templating\Helper\DateTimeHelper;
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Sonata\NewsBundle\Model\{BlogInterface,PostManagerInterface};
+use Symfony\Component\HttpFoundation\{Request,Response};
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * NEXT_MAJOR: remove DateTimeHelper dependency
+ */
 final class DailyPostArchiveAction extends AbstractPostArchiveAction
 {
     /**
      * @var DateTimeHelper
      */
-    private $dateTimeHelper;
+    private DateTimeHelper $dateTimeHelper;
 
     /**
+     * @param BlogInterface $blog
+     * @param PostManagerInterface $postManager
      * @param TranslatorInterface $translator
+     * @param DateTimeHelper $dateTimeHelper
      */
-    public function __construct(
-        BlogInterface $blog,
-        PostManagerInterface $postManager,
-        TranslatorInterface $translator,
-        DateTimeHelper $dateTimeHelper
-    ) {
+    public function __construct(BlogInterface $blog, PostManagerInterface $postManager, TranslatorInterface $translator,
+        DateTimeHelper $dateTimeHelper)
+    {
         parent::__construct($blog, $postManager, $translator);
 
         $this->dateTimeHelper = $dateTimeHelper;
     }
 
+
     /**
+     * @param Request $request
      * @param string $year
      * @param string $month
      * @param string $day
-     *
      * @return Response
      */
-    public function __invoke(Request $request, $year, $month, $day)
+    public function __invoke(Request $request, string $year, string $month, string $day): Response
     {
         $date = $this->getPostManager()->getPublicationDateQueryParts(sprintf('%d-%d-%d', $year, $month, $day), 'day');
 

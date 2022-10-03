@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Document;
 
+use Doctrine\ODM\MongoDB\MongoDBException;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 class BasePostRepository extends DocumentRepository
@@ -21,8 +22,9 @@ class BasePostRepository extends DocumentRepository
      * @param int $limit
      *
      * @return mixed
+     * @throws MongoDBException
      */
-    public function findLastPostQueryBuilder($limit)
+    public function findLastPostQueryBuilder(int $limit): mixed
     {
         return $this->createQueryBuilder()
             ->field('enabled')->equals(true)

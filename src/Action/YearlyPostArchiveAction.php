@@ -13,17 +13,16 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request,Response};
 
 final class YearlyPostArchiveAction extends AbstractPostArchiveAction
 {
     /**
+     * @param Request $request
      * @param string $year
-     *
      * @return Response
      */
-    public function __invoke(Request $request, $year)
+    public function __invoke(Request $request, string $year): Response
     {
         $date = $this->getPostManager()->getPublicationDateQueryParts(sprintf('%d-%d-%d', $year, 1, 1), 'year');
 

@@ -13,71 +13,62 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Mailer;
 
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\CommentInterface;
+use Sonata\NewsBundle\Model\{BlogInterface,CommentInterface};
 use Sonata\NewsBundle\Util\HashGeneratorInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface as SymfonyMailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 final class Mailer implements MailerInterface
 {
     /**
      * @var RouterInterface
      */
-    protected $router;
+    protected RouterInterface $router;
 
     /**
      * @var Environment
      */
-    protected $templating;
+    protected Environment $templating;
 
     /**
      * @var array
      */
-    protected $emails;
+    protected array $emails;
 
     /**
      * @var HashGeneratorInterface
      */
-    protected $hashGenerator;
+    protected HashGeneratorInterface $hashGenerator;
 
     /**
      * NEXT_MAJOR: Remove the support for `\Swift_Mailer` in this property.
      *
-     * @var SymfonyMailerInterface|\Swift_Mailer
+     * @var SymfonyMailerInterface
      */
-    protected $mailer;
+    protected SymfonyMailerInterface $mailer;
 
     /**
      * @var BlogInterface
      */
-    protected $blog;
+    protected BlogInterface $blog;
 
-    public function __construct(object $mailer, BlogInterface $blog, HashGeneratorInterface $generator, RouterInterface $router, Environment $templating, array $emails)
+    /**
+     * @param SymfonyMailerInterface $mailer
+     * @param BlogInterface $blog
+     * @param HashGeneratorInterface $generator
+     * @param RouterInterface $router
+     * @param Environment $templating
+     * @param array $emails
+     */
+    public function __construct(SymfonyMailerInterface $mailer, BlogInterface $blog, HashGeneratorInterface $generator, RouterInterface $router, Environment $templating, array $emails)
     {
-        // NEXT_MAJOR: Remove the following 2 conditions and use `Symfony\Component\Mailer\MailerInterface` as argument declaration for `$mailer`.
-        if (!$mailer instanceof SymfonyMailerInterface && !$mailer instanceof \Swift_Mailer) {
-            throw new \TypeError(sprintf(
-                'Argument 1 passed to "%s()" must be an instance of "%s" or "%s", instance of "%s" given.',
-                __METHOD__,
-                SymfonyMailerInterface::class,
-                \Swift_Mailer::class,
-                \get_class($mailer)
-            ));
-        }
-
-        if (!$mailer instanceof SymfonyMailerInterface) {
-            @trigger_error(sprintf(
-                'Passing other type than "%s" as argument 1 for "%s()" is deprecated since sonata-project/user-bundle 4.x'
-                .' and will be not supported in version 5.x.',
-                SymfonyMailerInterface::class,
-                __METHOD__
-            ), \E_USER_DEPRECATED);
-        }
-
         $this->blog = $blog;
         $this->mailer = $mailer;
         $this->hashGenerator = $generator;
@@ -86,6 +77,13 @@ final class Mailer implements MailerInterface
         $this->emails = $emails;
     }
 
+    /**
+     * @param CommentInterface $comment
+     * @return void
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function sendCommentNotification(CommentInterface $comment): void
     {
         $rendered = $this->templating->render($this->emails['notification']['template'], [
@@ -106,24 +104,12 @@ final class Mailer implements MailerInterface
      * @param string $renderedTemplate
      * @param string $fromEmail
      * @param string $toEmail
+     * @throws TransportExceptionInterface
      */
-    protected function sendEmailMessage($renderedTemplate, $fromEmail, $toEmail): void
+    protected function sendEmailMessage(string $renderedTemplate, string $fromEmail, string $toEmail): void
     {
         // Render the email, use the first line as the subject, and the rest as the body
         [$subject, $body] = explode("\n", trim($renderedTemplate), 2);
-
-        // NEXT_MAJOR: Remove this condition.
-        if ($this->mailer instanceof \Swift_Mailer) {
-            $message = $this->mailer->createMessage()
-                ->setSubject($subject)
-                ->setFrom($fromEmail)
-                ->setTo($toEmail)
-                ->setBody($body);
-
-            $this->mailer->send($message);
-
-            return;
-        }
 
         $email = (new Email())
                 ->from($fromEmail)

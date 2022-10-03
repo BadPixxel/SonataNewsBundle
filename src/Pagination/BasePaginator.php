@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Pagination;
 
+use Traversable;
+
 abstract class BasePaginator
 {
     public const PAGE_SIZE = 10;
@@ -20,74 +22,105 @@ abstract class BasePaginator
     /**
      * @var int
      */
-    protected $currentPage;
+    protected int $currentPage;
 
     /**
      * @var int
      */
-    protected $pageSize;
+    protected int $pageSize;
 
     /**
-     * @var \Traversable
+     * @var Traversable
      */
-    protected $results;
+    protected Traversable $results;
 
     /**
      * @var int
      */
-    protected $numResults;
+    protected int $numResults;
 
     /**
+     * @param int $page
      * @return self
      */
-    abstract public function paginate(int $page = 1);
+    abstract public function paginate(int $page = 1): BasePaginator;
 
+    /**
+     * @return int
+     */
     final public function getCurrentPage(): int
     {
         return $this->currentPage;
     }
 
+    /**
+     * @return int
+     */
     final public function getLastPage(): int
     {
         return (int) ceil($this->numResults / $this->pageSize);
     }
 
+    /**
+     * @return int
+     */
     final public function getPageSize(): int
     {
         return $this->pageSize;
     }
 
+    /**
+     * @return bool
+     */
     final public function hasPreviousPage(): bool
     {
         return $this->currentPage > 1;
     }
 
+    /**
+     * @return int
+     */
     final public function getPreviousPage(): int
     {
         return max(1, $this->currentPage - 1);
     }
 
+    /**
+     * @return bool
+     */
     final public function hasNextPage(): bool
     {
         return $this->currentPage < $this->getLastPage();
     }
 
+    /**
+     * @return int
+     */
     final public function getNextPage(): int
     {
         return min($this->getLastPage(), $this->currentPage + 1);
     }
 
+    /**
+     * @return bool
+     */
     final public function hasToPaginate(): bool
     {
         return $this->numResults > $this->pageSize;
     }
 
+    /**
+     * @return int
+     */
     final public function getNumResults(): int
     {
         return $this->numResults;
     }
 
-    final public function getResults(): \Traversable
+    /**
+     * @return Traversable
+     */
+    final public function getResults(): Traversable
     {
         return $this->results;
     }

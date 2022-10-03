@@ -20,14 +20,22 @@ use Sonata\NewsBundle\Model\PostInterface;
  */
 class CollectionPermalink implements PermalinkInterface
 {
-    public function generate(PostInterface $post)
+    /**
+     * @param PostInterface $post
+     * @return string
+     */
+    public function generate(PostInterface $post): string
     {
         return null === $post->getCollection()
             ? $post->getSlug()
             : sprintf('%s/%s', $post->getCollection()->getSlug(), $post->getSlug());
     }
 
-    public function getParameters($permalink)
+    /**
+     * @param string $permalink
+     * @return array
+     */
+    public function getParameters(string $permalink): array
     {
         $parameters = explode('/', $permalink);
 

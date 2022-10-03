@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Sonata\NewsBundle\Model\CommentInterface;
-use Sonata\NewsBundle\Model\CommentManagerInterface;
+use Sonata\NewsBundle\Model\{CommentInterface,CommentManagerInterface};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,8 +22,11 @@ final class CommentListAction extends AbstractController
     /**
      * @var CommentManagerInterface
      */
-    private $commentManager;
+    private CommentManagerInterface $commentManager;
 
+    /**
+     * @param CommentManagerInterface $commentManager
+     */
     public function __construct(CommentManagerInterface $commentManager)
     {
         $this->commentManager = $commentManager;
@@ -35,7 +37,7 @@ final class CommentListAction extends AbstractController
      *
      * @return Response
      */
-    public function __invoke($postId)
+    public function __invoke(int $postId): Response
     {
         $pager = $this->commentManager
             ->getPaginator([

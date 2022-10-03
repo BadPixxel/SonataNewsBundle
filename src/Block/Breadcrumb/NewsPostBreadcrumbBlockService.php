@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Block\Breadcrumb;
 
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\NewsBundle\Model\BlogInterface;
@@ -21,18 +22,17 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @final since sonata-project/news-bundle 3.x
- *
+ * NEXT MAJOR: Replace EngineInterface dependency
  * BlockService for post breadcrumb.
  *
  * @author Sylvain Deloux <sylvain.deloux@ekino.com>
  */
-class NewsPostBreadcrumbBlockService extends BaseNewsBreadcrumbBlockService
+final class NewsPostBreadcrumbBlockService extends BaseNewsBreadcrumbBlockService
 {
     /**
      * @var BlogInterface
      */
-    protected $blog;
+    protected BlogInterface $blog;
 
     /**
      * @param string $context
@@ -45,11 +45,18 @@ class NewsPostBreadcrumbBlockService extends BaseNewsBreadcrumbBlockService
         parent::__construct($context, $name, $templating, $menuProvider, $factory);
     }
 
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'sonata.news.block.breadcrumb_post';
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     * @return void
+     */
     public function configureSettings(OptionsResolver $resolver): void
     {
         parent::configureSettings($resolver);
@@ -59,7 +66,11 @@ class NewsPostBreadcrumbBlockService extends BaseNewsBreadcrumbBlockService
         ]);
     }
 
-    protected function getMenu(BlockContextInterface $blockContext)
+    /**
+     * @param BlockContextInterface $blockContext
+     * @return ItemInterface
+     */
+    protected function getMenu(BlockContextInterface $blockContext): ItemInterface
     {
         $menu = $this->getRootMenu($blockContext);
 

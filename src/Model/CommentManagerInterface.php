@@ -23,5 +23,12 @@ interface CommentManagerInterface extends ManagerInterface
      */
     public function updateCommentsCount(?PostInterface $post = null);
 
-    public function getPaginator(array $criteria = [], $page = 1, $limit = 10, array $sort = []): BasePaginator;
+    /**
+     * @param array $criteria
+     * @param int $page
+     * @param int $limit
+     * @param array $sort
+     * @return BasePaginator
+     */
+    public function getPaginator(array $criteria = [], int $page = 1, int $limit = 10, array $sort = []): BasePaginator;
 }

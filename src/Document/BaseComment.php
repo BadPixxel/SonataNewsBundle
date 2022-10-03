@@ -17,6 +17,9 @@ use Sonata\NewsBundle\Model\Comment as ModelComment;
 
 abstract class BaseComment extends ModelComment
 {
+    /**
+     * @return void
+     */
     public function prePersist(): void
     {
         $this->setCreatedAt(new \DateTime());

@@ -13,23 +13,22 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Entity;
 
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
+use Exception;
 use Sonata\ClassificationBundle\Model\CollectionInterface;
 use Sonata\Doctrine\Entity\BaseEntityManager;
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\PostInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
-use Sonata\NewsBundle\Pagination\BasePaginator;
-use Sonata\NewsBundle\Pagination\ORMPaginator;
+use Sonata\NewsBundle\Model\{BlogInterface,PostInterface,PostManagerInterface};
+use Sonata\NewsBundle\Pagination\{BasePaginator,ORMPaginator};
 
 class PostManager extends BaseEntityManager implements PostManagerInterface
 {
     /**
      * @param string $permalink
-     *
      * @return PostInterface|null
+     * @throws NonUniqueResultException
      */
-    public function findOneByPermalink($permalink, BlogInterface $blog)
+    public function findOneByPermalink(string $permalink, BlogInterface $blog) : ?PostInterface
     {
         $query = $this->getRepository()->createQueryBuilder('p');
 
@@ -78,8 +77,13 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
 
     /**
      * {@inheritdoc}
+     * @param string $date
+     * @param string $step
+     * @param string $alias
+     * @return array
+     * @throws Exception
      */
-    public function getPublicationDateQueryParts($date, $step, $alias = 'p')
+    public function getPublicationDateQueryParts(string $date, string $step, string $alias = 'p') :array
     {
         return [
             'query' => sprintf('%s.publicationDateStart >= :startDate AND %s.publicationDateStart < :endDate', $alias, $alias),
@@ -90,7 +94,14 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
         ];
     }
 
-    public function getPaginator(array $criteria = [], $page = 1, $limit = 10, array $sort = []): BasePaginator
+    /**
+     * @param array $criteria
+     * @param int $page
+     * @param int $limit
+     * @param array $sort
+     * @return BasePaginator
+     */
+    public function getPaginator(array $criteria = [], int $page = 1, int $limit = 10, array $sort = []): BasePaginator
     {
         if (!isset($criteria['mode'])) {
             $criteria['mode'] = 'public';
@@ -152,10 +163,9 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
 
     /**
      * @param string $collection
-     *
      * @return array
      */
-    protected function getPublicationCollectionQueryParts($collection)
+    protected function getPublicationCollectionQueryParts(string $collection): array
     {
         $queryParts = ['query' => '', 'params' => []];
 

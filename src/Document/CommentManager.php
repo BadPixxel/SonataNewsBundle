@@ -13,19 +13,18 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Document;
 
+use Doctrine\ODM\MongoDB\MongoDBException;
 use Sonata\Doctrine\Document\BaseDocumentManager;
-use Sonata\NewsBundle\Model\CommentInterface;
-use Sonata\NewsBundle\Model\CommentManagerInterface;
-use Sonata\NewsBundle\Model\PostInterface;
-use Sonata\NewsBundle\Pagination\BasePaginator;
-use Sonata\NewsBundle\Pagination\MongoDBPaginator;
+use Sonata\NewsBundle\Model\{CommentInterface,CommentManagerInterface,PostInterface};
+use Sonata\NewsBundle\Pagination\{BasePaginator,MongoDBPaginator};
 
 class CommentManager extends BaseDocumentManager implements CommentManagerInterface
 {
     /**
      * Update the comments count.
      *
-     * @param PostInterface $post
+     * @param PostInterface|null $post
+     * @throws MongoDBException
      */
     public function updateCommentsCount(?PostInterface $post = null): void
     {
@@ -34,7 +33,14 @@ class CommentManager extends BaseDocumentManager implements CommentManagerInterf
         $this->getDocumentManager()->flush();
     }
 
-    public function getPaginator(array $criteria = [], $page = 1, $limit = 10, array $sort = []): BasePaginator
+    /**
+     * @param array $criteria
+     * @param int $page
+     * @param int $limit
+     * @param array $sort
+     * @return BasePaginator
+     */
+    public function getPaginator(array $criteria = [], int $page = 1, int $limit = 10, array $sort = []): BasePaginator
     {
         $qb = $this->getDocumentManager()->getRepository($this->class)
             ->createQueryBuilder()

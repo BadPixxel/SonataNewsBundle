@@ -16,20 +16,30 @@ namespace Sonata\NewsBundle\Pagination;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
+use Exception;
 
 final class ORMPaginator extends BasePaginator
 {
     /**
      * @var QueryBuilder
      */
-    private $queryBuilder;
+    private QueryBuilder $queryBuilder;
 
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param int $pageSize
+     */
     public function __construct(QueryBuilder $queryBuilder, int $pageSize = BasePaginator::PAGE_SIZE)
     {
         $this->queryBuilder = $queryBuilder;
         $this->pageSize = $pageSize;
     }
 
+    /**
+     * @param int $page
+     * @return $this
+     * @throws Exception
+     */
     public function paginate(int $page = 1): self
     {
         $this->currentPage = max(1, $page);

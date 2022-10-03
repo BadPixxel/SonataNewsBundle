@@ -22,24 +22,34 @@ class CommentEvent extends Event
     /**
      * @var Request|null
      */
-    private $request;
+    private ?Request $request;
 
     /**
      * @var CommentInterface
      */
-    private $comment;
+    private CommentInterface $comment;
 
+    /**
+     * @param CommentInterface $comment
+     * @param Request|null $request
+     */
     public function __construct(CommentInterface $comment, ?Request $request = null)
     {
         $this->comment = $comment;
         $this->request = $request;
     }
 
+    /**
+     * @return CommentInterface
+     */
     final public function getComment(): CommentInterface
     {
         return $this->comment;
     }
 
+    /**
+     * @return Request|null
+     */
     final public function getRequest(): ?Request
     {
         return $this->request;

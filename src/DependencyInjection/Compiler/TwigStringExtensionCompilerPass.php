@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\{ContainerBuilder,Definition};
 use Twig\Extra\String\StringExtension;
 
 final class TwigStringExtensionCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @param ContainerBuilder $container
+     * @return void
+     */
     public function process(ContainerBuilder $container): void
     {
         foreach ($container->findTaggedServiceIds('twig.extension') as $id => $attributes) {

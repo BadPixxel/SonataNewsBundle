@@ -22,33 +22,33 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\Doctrine\Model\ManagerInterface;
 use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\NewsBundle\Model\CommentManagerInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\{ChoiceType,IntegerType,TextType};
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 /**
- *
+ * NEXT MAJOR: replace reference of ManagerInterface by CommentManagerInterface
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 final class RecentCommentsBlockService extends AbstractAdminBlockService
 {
     /**
-     * @var CommentManagerInterface
+     * @var ManagerInterface|CommentManagerInterface
      */
-    protected $manager;
+    protected ManagerInterface|CommentManagerInterface $manager;
 
     /**
      * @var Pool
      */
-    protected $adminPool;
+    protected Pool $adminPool;
 
     /**
      * @param string $name
-     * @param Pool   $adminPool
+     * @param Environment $templating
+     * @param ManagerInterface $commentManager
+     * @param Pool|null $adminPool
      */
-    public function __construct($name, Environment $templating, ManagerInterface $commentManager, ?Pool $adminPool = null)
+    public function __construct(string $name, Environment $templating, ManagerInterface $commentManager, ?Pool $adminPool = null)
     {
         if (!$commentManager instanceof CommentManagerInterface) {
             @trigger_error(

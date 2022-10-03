@@ -23,17 +23,21 @@ class DatePermalink implements PermalinkInterface
     /**
      * @var string
      */
-    protected $pattern;
+    protected string $pattern;
 
     /**
      * @param string $pattern
      */
-    public function __construct($pattern = '%1$04d/%2$d/%3$d/%4$s')
+    public function __construct(string $pattern = '%1$04d/%2$d/%3$d/%4$s')
     {
         $this->pattern = $pattern;
     }
 
-    public function generate(PostInterface $post)
+    /**
+     * @param PostInterface $post
+     * @return string
+     */
+    public function generate(PostInterface $post): string
     {
         return sprintf(
             $this->pattern,
@@ -44,7 +48,11 @@ class DatePermalink implements PermalinkInterface
         );
     }
 
-    public function getParameters($permalink)
+    /**
+     * @param string $permalink
+     * @return array
+     */
+    public function getParameters(string $permalink): array
     {
         $parameters = explode('/', $permalink);
 

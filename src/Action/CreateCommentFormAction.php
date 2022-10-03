@@ -14,43 +14,38 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Action;
 
 use Sonata\NewsBundle\Form\Type\CommentType;
-use Sonata\NewsBundle\Model\CommentManagerInterface;
-use Sonata\NewsBundle\Model\PostInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
+use Sonata\NewsBundle\Model\{CommentManagerInterface,PostInterface,PostManagerInterface};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\{FormFactoryInterface,FormInterface};
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
+
 
 final class CreateCommentFormAction extends AbstractController
 {
     /**
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
      * @var PostManagerInterface
      */
-    private $postManager;
+    private PostManagerInterface $postManager;
 
     /**
      * @var CommentManagerInterface
      */
-    private $commentManager;
+    private CommentManagerInterface $commentManager;
 
     /**
      * @var FormFactoryInterface
      */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
-    public function __construct(
-        RouterInterface $router,
-        PostManagerInterface $postManager,
-        CommentManagerInterface $commentManager,
-        FormFactoryInterface $formFactory
-    ) {
+    public function __construct(RouterInterface $router, PostManagerInterface $postManager,
+        CommentManagerInterface $commentManager, FormFactoryInterface $formFactory)
+    {
         $this->router = $router;
         $this->postManager = $postManager;
         $this->commentManager = $commentManager;
@@ -59,11 +54,11 @@ final class CreateCommentFormAction extends AbstractController
 
     /**
      * @param string $postId
-     * @param bool   $form
+     * @param bool $form
      *
      * @return Response
      */
-    public function __invoke($postId, $form = false)
+    public function __invoke(string $postId, bool $form = false): Response
     {
         if (!$form) {
             $post = $this->postManager->findOneBy([
@@ -80,9 +75,10 @@ final class CreateCommentFormAction extends AbstractController
     }
 
     /**
+     * @param PostInterface $post
      * @return FormInterface
      */
-    private function getCommentForm(PostInterface $post)
+    private function getCommentForm(PostInterface $post): FormInterface
     {
         $comment = $this->commentManager->create();
         $comment->setPost($post);

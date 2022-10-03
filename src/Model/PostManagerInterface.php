@@ -20,10 +20,10 @@ interface PostManagerInterface extends ManagerInterface
 {
     /**
      * @param string $permalink
-     *
-     * @return PostInterface
+     * @param BlogInterface $blog
+     * @return ?PostInterface
      */
-    public function findOneByPermalink($permalink, BlogInterface $blog);
+    public function findOneByPermalink(string $permalink, BlogInterface $blog): ?PostInterface;
 
     /**
      * @param string $date  Date in format YYYY-MM-DD
@@ -32,7 +32,14 @@ interface PostManagerInterface extends ManagerInterface
      *
      * @return array
      */
-    public function getPublicationDateQueryParts($date, $step, $alias = 'p');
+    public function getPublicationDateQueryParts(string $date, string $step, string $alias = 'p'): array;
 
-    public function getPaginator(array $criteria = [], $page = 1, $limit = 10, array $sort = []): BasePaginator;
+    /**
+     * @param array $criteria
+     * @param int $page
+     * @param int $limit
+     * @param array $sort
+     * @return BasePaginator
+     */
+    public function getPaginator(array $criteria = [], int $page = 1, int $limit = 10, array $sort = []): BasePaginator;
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Model;
 
+use Doctrine\DBAL\Connection;
 use Sonata\NewsBundle\Exception\NoDriverException;
 use Sonata\NewsBundle\Pagination\BasePaginator;
 
@@ -23,26 +24,40 @@ use Sonata\NewsBundle\Pagination\BasePaginator;
  */
 final class NoDriverManager implements PostManagerInterface, CommentManagerInterface
 {
-    public function getClass()
-    {
-        throw new NoDriverException();
-    }
-
-    public function findAll()
+    /**
+     * @return string
+     */
+    public function getClass(): string
     {
         throw new NoDriverException();
     }
 
     /**
-     * @param int|null $limit
-     * @param int|null $offset
+     * @return array|object[]
      */
-    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
+    public function findAll(): array
     {
         throw new NoDriverException();
     }
 
-    public function findOneBy(array $criteria, ?array $orderBy = null)
+    /**
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param $limit
+     * @param $offset
+     * @return array|object[]
+     */
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): array
+    {
+        throw new NoDriverException();
+    }
+
+    /**
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @return mixed|object|null
+     */
+    public function findOneBy(array $criteria, ?array $orderBy = null): mixed
     {
         throw new NoDriverException();
     }
@@ -55,7 +70,10 @@ final class NoDriverManager implements PostManagerInterface, CommentManagerInter
         throw new NoDriverException();
     }
 
-    public function create()
+    /**
+     * @return mixed|object
+     */
+    public function create(): mixed
     {
         throw new NoDriverException();
     }
@@ -78,31 +96,59 @@ final class NoDriverManager implements PostManagerInterface, CommentManagerInter
         throw new NoDriverException();
     }
 
-    public function getTableName()
+    /**
+     * @return string
+     */
+    public function getTableName(): string
     {
         throw new NoDriverException();
     }
 
-    public function getConnection()
+    /**
+     * @return Connection
+     */
+    public function getConnection(): Connection
     {
         throw new NoDriverException();
     }
 
-    public function updateCommentsCount(?PostInterface $post = null)
+    /**
+     * @param PostInterface|null $post
+     * @return void
+     */
+    public function updateCommentsCount(?PostInterface $post = null): void
     {
     }
 
-    public function findOneByPermalink($permalink, BlogInterface $blog)
+    /**
+     * @param string $permalink
+     * @param BlogInterface $blog
+     * @return PostInterface|null
+     */
+    public function findOneByPermalink(string $permalink, BlogInterface $blog): ?PostInterface
     {
         throw new NoDriverException();
     }
 
-    public function getPublicationDateQueryParts($date, $step, $alias = 'p')
+    /**
+     * @param string $date
+     * @param string $step
+     * @param string $alias
+     * @return array
+     */
+    public function getPublicationDateQueryParts(string $date, string $step, string $alias = 'p'): array
     {
         return [];
     }
 
-    public function getPaginator(array $criteria = [], $page = 1, $limit = 10, array $sort = []): BasePaginator
+    /**
+     * @param array $criteria
+     * @param int $page
+     * @param int $limit
+     * @param array $sort
+     * @return BasePaginator
+     */
+    public function getPaginator(array $criteria = [], int $page = 1, int $limit = 10, array $sort = []): BasePaginator
     {
         throw new NoDriverException();
     }

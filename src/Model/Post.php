@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Sonata\ClassificationBundle\Model\CollectionInterface;
-use Sonata\ClassificationBundle\Model\Tag;
-use Sonata\ClassificationBundle\Model\TagInterface;
+use Doctrine\Common\Collections\{ArrayCollection,Collection};
+use Sonata\ClassificationBundle\Model\{CollectionInterface,Tag,TagInterface};
+use DateTime;
+use JetBrains\PhpStorm\Pure;
 use Sonata\MediaBundle\Model\MediaInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -26,197 +25,264 @@ abstract class Post implements PostInterface
     /**
      * @var string
      */
-    protected $title;
+    protected string $title;
 
     /**
      * @var string
      */
-    protected $slug;
+    protected string $slug;
 
     /**
      * @var string
      */
-    protected $abstract;
+    protected string $abstract;
 
     /**
      * @var string
      */
-    protected $content;
+    protected string $content;
 
     /**
      * @var string
      */
-    protected $rawContent;
+    protected string $rawContent;
 
     /**
      * @var string
      */
-    protected $contentFormatter;
+    protected string $contentFormatter;
 
     /**
      * @var Collection|TagInterface[]
      */
-    protected $tags;
+    protected array|Collection $tags;
 
     /**
      * @var Collection|CommentInterface[]
      */
-    protected $comments;
+    protected array|Collection $comments;
 
     /**
      * @var bool
      */
-    protected $enabled;
+    protected bool $enabled;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      */
-    protected $publicationDateStart;
+    protected ?DateTime $publicationDateStart;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     /**
      * @var bool
      */
-    protected $commentsEnabled = true;
+    protected bool $commentsEnabled = true;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      */
-    protected $commentsCloseAt;
-
-    /**
-     * @var int
-     */
-    protected $commentsDefaultStatus;
+    protected ?DateTime $commentsCloseAt;
 
     /**
      * @var int
      */
-    protected $commentsCount = 0;
+    protected int $commentsDefaultStatus;
+
+    /**
+     * @var int
+     */
+    protected int $commentsCount = 0;
 
     /**
      * @var UserInterface|null
      */
-    protected $author;
+    protected ?UserInterface $author;
 
     /**
      * @var MediaInterface|null
      */
-    protected $image;
+    protected ?MediaInterface $image;
 
     /**
      * @var CollectionInterface|null
      */
-    protected $collection;
+    protected ?CollectionInterface $collection;
 
     public function __construct()
     {
-        $this->setPublicationDateStart(new \DateTime());
+        $this->setPublicationDateStart(new DateTime());
     }
 
-    public function __toString()
+    /**
+     * @return string
+     */
+    #[Pure] public function __toString()
     {
         return $this->getTitle() ?: 'n/a';
     }
 
-    public function setTitle($title): void
+    /**
+     * @param string $title
+     * @return void
+     */
+    public function setTitle(string $title): void
     {
         $this->title = $title;
 
         $this->setSlug(Tag::slugify($title));
     }
 
-    public function getTitle()
+    /**
+     * @return string
+     */
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setAbstract($abstract): void
+    /**
+     * @param string $abstract
+     * @return void
+     */
+    public function setAbstract(string $abstract): void
     {
         $this->abstract = $abstract;
     }
 
-    public function getAbstract()
+    /**
+     * @return string
+     */
+    public function getAbstract(): string
     {
         return $this->abstract;
     }
 
-    public function setContent($content): void
+    /**
+     * @param string $content
+     * @return void
+     */
+    public function setContent(string $content): void
     {
         $this->content = $content;
     }
 
-    public function getContent()
+    /**
+     * @return string
+     */
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    public function setEnabled($enabled): void
+    /**
+     * @param bool $enabled
+     * @return void
+     */
+    public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
     }
 
-    public function getEnabled()
+    /**
+     * @return bool
+     */
+    public function getEnabled(): bool
     {
         return $this->enabled;
     }
 
-    public function setSlug($slug): void
+    /**
+     * @param string $slug
+     * @return void
+     */
+    public function setSlug(string $slug): void
     {
         $this->slug = $slug;
     }
 
-    public function getSlug()
+    /**
+     * @return string
+     */
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
-    public function setPublicationDateStart(?\DateTime $publicationDateStart = null): void
+    /**
+     * @param DateTime|null $publicationDateStart
+     * @return void
+     */
+    public function setPublicationDateStart(?DateTime $publicationDateStart = null): void
     {
         $this->publicationDateStart = $publicationDateStart;
     }
 
-    public function getPublicationDateStart()
+    /**
+     * @return DateTime|null
+     */
+    public function getPublicationDateStart(): ?DateTime
     {
         return $this->publicationDateStart;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt = null): void
+    /**
+     * @param DateTime|null $createdAt
+     * @return void
+     */
+    public function setCreatedAt(?DateTime $createdAt = null): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getCreatedAt()
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt = null): void
+    /**
+     * @param DateTime|null $updatedAt
+     * @return void
+     */
+    public function setUpdatedAt(?DateTime $updatedAt = null): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function getUpdatedAt()
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
+    /**
+     * @param CommentInterface $comment
+     * @return void
+     */
     public function addComments(CommentInterface $comment): void
     {
         $this->comments[] = $comment;
         $comment->setPost($this);
     }
 
-    public function setComments($comments): void
+    /**
+     * @param array|Collection $comments
+     * @return void
+     */
+    public function setComments(Collection|array $comments): void
     {
         $this->comments = new ArrayCollection();
 
@@ -225,171 +291,266 @@ abstract class Post implements PostInterface
         }
     }
 
-    public function getComments()
+    /**
+     * @return Collection|CommentInterface[]
+     */
+    public function getComments(): Collection|array
     {
         return $this->comments;
     }
 
+    /**
+     * @param TagInterface $tags
+     * @return void
+     */
     public function addTags(TagInterface $tags): void
     {
         $this->tags[] = $tags;
     }
 
-    public function getTags()
+    /**
+     * @return Collection|TagInterface[]
+     */
+    public function getTags(): array|Collection
     {
         return $this->tags;
     }
 
-    public function setTags($tags): void
+    /**
+     * @param array|Collection $tags
+     * @return void
+     */
+    public function setTags(array|Collection $tags): void
     {
         $this->tags = $tags;
     }
 
+    /**
+     * @return void
+     */
     public function prePersist(): void
     {
         if (!$this->getPublicationDateStart()) {
-            $this->setPublicationDateStart(new \DateTime());
+            $this->setPublicationDateStart(new DateTime());
         }
 
-        $this->setCreatedAt(new \DateTime());
-        $this->setUpdatedAt(new \DateTime());
+        $this->setCreatedAt(new DateTime());
+        $this->setUpdatedAt(new DateTime());
     }
 
+    /**
+     * @return void
+     */
     public function preUpdate(): void
     {
         if (!$this->getPublicationDateStart()) {
-            $this->setPublicationDateStart(new \DateTime());
+            $this->setPublicationDateStart(new DateTime());
         }
 
-        $this->setUpdatedAt(new \DateTime());
+        $this->setUpdatedAt(new DateTime());
     }
 
-    public function getYear()
+    /**
+     * @return string
+     */
+    public function getYear(): string
     {
         return $this->getPublicationDateStart()->format('Y');
     }
 
-    public function getMonth()
+    /**
+     * @return string
+     */
+    public function getMonth(): string
     {
         return $this->getPublicationDateStart()->format('m');
     }
 
-    public function getDay()
+    /**
+     * @return string
+     */
+    public function getDay(): string
     {
         return $this->getPublicationDateStart()->format('d');
     }
 
-    public function setCommentsEnabled($commentsEnabled): void
+    /**
+     * @param bool $commentsEnabled
+     * @return void
+     */
+    public function setCommentsEnabled(bool $commentsEnabled): void
     {
         $this->commentsEnabled = $commentsEnabled;
     }
 
-    public function getCommentsEnabled()
+    /**
+     * @return bool
+     */
+    public function getCommentsEnabled(): bool
     {
         return $this->commentsEnabled;
     }
 
-    public function setCommentsCloseAt(?\DateTime $commentsCloseAt = null): void
+    /**
+     * @param DateTime|null $commentsCloseAt
+     * @return void
+     */
+    public function setCommentsCloseAt(?DateTime $commentsCloseAt = null): void
     {
         $this->commentsCloseAt = $commentsCloseAt;
     }
 
-    public function getCommentsCloseAt()
+    /**
+     * @return DateTime|null
+     */
+    public function getCommentsCloseAt(): ?DateTime
     {
         return $this->commentsCloseAt;
     }
 
-    public function setCommentsDefaultStatus($commentsDefaultStatus): void
+    /**
+     * @param int $commentsDefaultStatus
+     * @return void
+     */
+    public function setCommentsDefaultStatus(int $commentsDefaultStatus): void
     {
         $this->commentsDefaultStatus = $commentsDefaultStatus;
     }
 
-    public function getCommentsDefaultStatus()
+    /**
+     * @return int
+     */
+    public function getCommentsDefaultStatus(): int
     {
         return $this->commentsDefaultStatus;
     }
 
-    public function setCommentsCount($commentsCount): void
+    /**
+     * @param int $commentsCount
+     * @return void
+     */
+    public function setCommentsCount(int $commentsCount): void
     {
         $this->commentsCount = $commentsCount;
     }
 
+    /**
+     * @return int
+     */
     public function getCommentsCount()
     {
         return $this->commentsCount;
     }
 
-    public function isCommentable()
+    /**
+     * @return bool
+     */
+    public function isCommentable(): bool
     {
         if (!$this->getCommentsEnabled() || !$this->getEnabled()) {
             return false;
         }
 
-        if ($this->getCommentsCloseAt() instanceof \DateTime) {
-            return 1 === $this->getCommentsCloseAt()->diff(new \DateTime())->invert ? true : false;
+        if ($this->getCommentsCloseAt() instanceof DateTime) {
+            return 1 === $this->getCommentsCloseAt()->diff(new DateTime())->invert;
         }
 
         return true;
     }
 
-    public function isPublic()
+    /**
+     * @return bool
+     */
+    public function isPublic(): bool
     {
         if (!$this->getEnabled()) {
             return false;
         }
 
-        return 0 === $this->getPublicationDateStart()->diff(new \DateTime())->invert ? true : false;
+        return 0 === $this->getPublicationDateStart()->diff(new DateTime())->invert;
     }
 
-    public function setAuthor($author): void
+    /**
+     * @param UserInterface|null $author
+     * @return void
+     */
+    public function setAuthor(?UserInterface $author): void
     {
         $this->author = $author;
     }
 
-    public function getAuthor()
+    /**
+     * @return UserInterface|null
+     */
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
 
-    public function setImage($image): void
+    /**
+     * @param MediaInterface|null $image
+     * @return void
+     */
+    public function setImage(?MediaInterface $image): void
     {
         $this->image = $image;
     }
 
-    public function getImage()
+    /**
+     * @return MediaInterface|null
+     */
+    public function getImage(): ?MediaInterface
     {
         return $this->image;
     }
 
+    /**
+     * @param CollectionInterface|null $collection
+     * @return void
+     */
     public function setCollection(?CollectionInterface $collection = null): void
     {
         $this->collection = $collection;
     }
 
-    public function getCollection()
+    /**
+     * @return CollectionInterface|null
+     */
+    public function getCollection(): ?CollectionInterface
     {
         return $this->collection;
     }
 
     /**
      * @param string $contentFormatter
+     * @return void
      */
-    public function setContentFormatter($contentFormatter): void
+    public function setContentFormatter(string $contentFormatter): void
     {
         $this->contentFormatter = $contentFormatter;
     }
 
-    public function getContentFormatter()
+    /**
+     * @return string
+     */
+    public function getContentFormatter(): string
     {
         return $this->contentFormatter;
     }
 
-    public function setRawContent($rawContent): void
+    /**
+     * @param string $rawContent
+     * @return void
+     */
+    public function setRawContent(string $rawContent): void
     {
         $this->rawContent = $rawContent;
     }
 
-    public function getRawContent()
+    /**
+     * @return string
+     */
+    public function getRawContent(): string
     {
         return $this->rawContent;
     }

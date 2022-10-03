@@ -13,25 +13,23 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\{ArrayNodeDefinition,TreeBuilder};
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * @final since sonata-project/news-bundle 3.x
  *
  * This is the class that validates and merges configuration from your app/config files.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  */
-class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
-    /**
-     * NEXT_MAJOR: make constant protected/private.
-     */
-    public const DB_DRIVERS = ['doctrine_orm', 'doctrine_mongodb', 'no_driver'];
+    private const DB_DRIVERS = ['doctrine_orm', 'doctrine_mongodb', 'no_driver'];
 
-    public function getConfigTreeBuilder()
+    /**
+     * @return TreeBuilder
+     */
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('sonata_news');
         $rootNode = $treeBuilder->getRootNode();
@@ -87,6 +85,10 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
+    /**
+     * @param ArrayNodeDefinition $node
+     * @return void
+     */
     private function addAdminSection(ArrayNodeDefinition $node): void
     {
         $node
@@ -115,6 +117,10 @@ class Configuration implements ConfigurationInterface
             ->end();
     }
 
+    /**
+     * @param ArrayNodeDefinition $node
+     * @return void
+     */
     private function addModelSection(ArrayNodeDefinition $node): void
     {
         $node

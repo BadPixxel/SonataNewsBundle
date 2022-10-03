@@ -14,14 +14,11 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Admin;
 
 use Knp\Menu\ItemInterface as MenuItemInterface;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Admin\{AbstractAdmin,AdminInterface};
+use Sonata\AdminBundle\Datagrid\{DatagridMapper,ListMapper};
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType as FilterChoiceType;
-use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Form\Type\{ModelAutocompleteType,ModelListType};
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\Form\Type\DateTimePickerType;
@@ -31,39 +28,33 @@ use Sonata\NewsBundle\Form\Type\CommentStatusType;
 use Sonata\NewsBundle\Model\CommentInterface;
 use Sonata\NewsBundle\Permalink\PermalinkInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\{CheckboxType,TextareaType,ChoiceType};
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\AdminBundle\Form\Type\TemplateType;
 use Symfony\Component\Translation\DataCollectorTranslator;
 
 class PostAdmin extends AbstractAdmin
 {
-    /**
-     * @deprecated since sonata-project/news-bundle 3.13, to be removed in 4.0.
-     */
-    protected $userManager;
 
     /**
      * @var FormatterPool
      */
-    protected $formatterPool;
+    protected FormatterPool $formatterPool;
 
     /**
      * @var PermalinkInterface
      */
-    protected $permalinkGenerator;
+    protected PermalinkInterface $permalinkGenerator;
 
     /**
      * @var ParameterBagInterface
      */
-    protected $params;
+    protected ParameterBagInterface $params;
 
     /**
      * @var DataCollectorTranslator
      */
-    protected $translator;
+    protected DataCollectorTranslator $translator;
 
     public function __construct(string $code, string $class, string $baseControllerName, ParameterBagInterface $params, DataCollectorTranslator $translator)
     {
@@ -72,35 +63,46 @@ class PostAdmin extends AbstractAdmin
         $this->translator = $translator;
     }
 
-
     /**
-     * @deprecated since sonata-project/news-bundle 3.13, to be removed in 4.0.
+     * @param FormatterPool $formatterPool
+     * @return void
      */
-    public function setUserManager($userManager): void
-    {
-        $this->userManager = $userManager;
-    }
-
     public function setPoolFormatter(FormatterPool $formatterPool): void
     {
         $this->formatterPool = $formatterPool;
     }
 
-    public function prePersist($post): void
+    /**
+     * @param object $post
+     * @return void
+     */
+    public function prePersist(object $post): void
     {
         $post->setContent($this->formatterPool->transform($post->getContentFormatter(), $post->getRawContent()));
     }
 
-    public function preUpdate($post): void
+    /**
+     * @param object $post
+     * @return void
+     */
+    public function preUpdate(object $post): void
     {
         $post->setContent($this->formatterPool->transform($post->getContentFormatter(), $post->getRawContent()));
     }
 
+    /**
+     * @param PermalinkInterface $permalinkGenerator
+     * @return void
+     */
     public function setPermalinkGenerator(PermalinkInterface $permalinkGenerator): void
     {
         $this->permalinkGenerator = $permalinkGenerator;
     }
 
+    /**
+     * @param ShowMapper $show
+     * @return void
+     */
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -112,6 +114,10 @@ class PostAdmin extends AbstractAdmin
             ->add('tags');
     }
 
+    /**
+     * @param FormMapper $form
+     * @return void
+     */
     protected function configureFormFields(FormMapper $form): void
     {
         $isHorizontal = 'horizontal' === $this->params->get('sonata.form.form_type');
@@ -179,6 +185,10 @@ class PostAdmin extends AbstractAdmin
             ->end();
     }
 
+    /**
+     * @param ListMapper $list
+     * @return void
+     */
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -191,6 +201,10 @@ class PostAdmin extends AbstractAdmin
             ->add('publicationDateStart');
     }
 
+    /**
+     * @param DatagridMapper $filter
+     * @return void
+     */
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -213,7 +227,13 @@ class PostAdmin extends AbstractAdmin
             ]);
     }
 
-    protected function configureTabMenu(MenuItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
+    /**
+     * @param MenuItemInterface $menu
+     * @param string $action
+     * @param AdminInterface|null $childAdmin
+     * @return void
+     */
+    protected function configureTabMenu(MenuItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !\in_array($action, ['edit'], true)) {
             return;

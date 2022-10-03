@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Datagrid\{DatagridMapper,ListMapper};
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\Doctrine\Model\ManagerInterface;
@@ -28,7 +27,7 @@ class CommentAdmin extends AbstractAdmin
     /**
      * @var CommentManagerInterface
      */
-    protected $commentManager;
+    protected CommentManagerInterface $commentManager;
 
     // public function getBatchActions()
     // {
@@ -49,21 +48,37 @@ class CommentAdmin extends AbstractAdmin
     //     return $actions;
     // }
 
-    public function postPersist($object): void
+    /**
+     * @param object $object
+     * @return void
+     */
+    public function postPersist(object $object): void
     {
         $this->updateCountsComment();
     }
 
-    public function postRemove($object): void
+    /**
+     * @param object $object
+     * @return void
+     */
+    public function postRemove( object $object): void
     {
         $this->updateCountsComment();
     }
 
-    public function postUpdate($object): void
+    /**
+     * @param object $object
+     * @return void
+     */
+    public function postUpdate(object $object): void
     {
         $this->updateCountsComment();
     }
 
+    /**
+     * @param ManagerInterface $commentManager
+     * @return void
+     */
     public function setCommentManager(ManagerInterface $commentManager): void
     {
         if (!$commentManager instanceof CommentManagerInterface) {
@@ -78,6 +93,10 @@ class CommentAdmin extends AbstractAdmin
         $this->commentManager = $commentManager;
     }
 
+    /**
+     * @param FormMapper $form
+     * @return void
+     */
     protected function configureFormFields(FormMapper $form): void
     {
         // define group zoning
@@ -107,6 +126,10 @@ class CommentAdmin extends AbstractAdmin
             ->end();
     }
 
+    /**
+     * @param DatagridMapper $filter
+     * @return void
+     */
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -115,6 +138,10 @@ class CommentAdmin extends AbstractAdmin
             ->add('message');
     }
 
+    /**
+     * @param ListMapper $list
+     * @return void
+     */
     protected function configureListFields(ListMapper $list): void
     {
         $list

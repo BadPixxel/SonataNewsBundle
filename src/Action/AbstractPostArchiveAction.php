@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
+use Sonata\NewsBundle\Model\{BlogInterface,PostManagerInterface};
 use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\TranslatorInterface as LegacyTranslator;
+use Symfony\Component\HttpFoundation\{Request,Response};
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractPostArchiveAction extends AbstractController
@@ -27,45 +24,30 @@ abstract class AbstractPostArchiveAction extends AbstractController
     /**
      * @var BlogInterface
      */
-    private $blog;
+    private BlogInterface $blog;
 
     /**
      * @var PostManagerInterface
      */
-    private $postManager;
+    private PostManagerInterface $postManager;
 
     /**
-     * @var TranslatorInterface|LegacyTranslator
+     * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * @var SeoPageInterface|null
      */
-    private $seoPage;
+    private ?SeoPageInterface $seoPage;
 
     /**
-     * @param TranslatorInterface|LegacyTranslator $translator
+     * @param BlogInterface $blog
+     * @param PostManagerInterface $postManager
+     * @param TranslatorInterface $translator
      */
-    public function __construct(BlogInterface $blog, PostManagerInterface $postManager, object $translator)
+    public function __construct(BlogInterface $blog, PostManagerInterface $postManager, TranslatorInterface $translator)
     {
-        // NEXT_MAJOR: Remove usage of LegacyTranslator
-        if (!$translator instanceof LegacyTranslator && !$translator instanceof TranslatorInterface) {
-            throw new \TypeError(sprintf(
-                'Argument 3 passed to %s() must be an instance of %s, %s given.',
-                __METHOD__,
-                TranslatorInterface::class,
-                \get_class($translator)
-            ));
-        }
-
-        if ($translator instanceof LegacyTranslator) {
-            @trigger_error(
-                sprintf('Argument 3 passed to %s() must be an instance of %s.', __METHOD__, TranslatorInterface::class),
-                \E_USER_DEPRECATED
-            );
-        }
-
         $this->blog = $blog;
         $this->postManager = $postManager;
         $this->translator = $translator;
@@ -73,12 +55,12 @@ abstract class AbstractPostArchiveAction extends AbstractController
 
     /**
      * @internal
-     *
-     * NEXT_MAJOR: make this method protected
-     *
+     * @param Request $request
+     * @param array $criteria
+     * @param array $parameters
      * @return Response
      */
-    final public function renderArchive(Request $request, array $criteria = [], array $parameters = [])
+    final protected function renderArchive(Request $request, array $criteria = [], array $parameters = []): Response
     {
         $pager = $this->postManager->getPaginator(
             $criteria,
@@ -110,35 +92,41 @@ abstract class AbstractPostArchiveAction extends AbstractController
         return $response;
     }
 
+    /**
+     * @param SeoPageInterface|null $seoPage
+     * @return void
+     */
     public function setSeoPage(?SeoPageInterface $seoPage = null): void
     {
         $this->seoPage = $seoPage;
     }
 
     /**
-     * @param string      $id
+     * @param string $id
+     * @param array $parameters
      * @param string|null $domain
      * @param string|null $locale
-     *
      * @return string
      */
-    final protected function trans($id, array $parameters = [], $domain = 'SonataNewsBundle', $locale = null)
+    final protected function trans(string $id, array $parameters = [], ?string $domain = 'SonataNewsBundle', string $locale = null): string
     {
+
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
     /**
      * @return BlogInterface
      */
-    final protected function getBlog()
+    final protected function getBlog(): BlogInterface
     {
         return $this->blog;
     }
 
+
     /**
      * @return SeoPageInterface|null
      */
-    final protected function getSeoPage()
+    final protected function getSeoPage(): ?SeoPageInterface
     {
         return $this->seoPage;
     }
@@ -146,7 +134,7 @@ abstract class AbstractPostArchiveAction extends AbstractController
     /**
      * @return PostManagerInterface
      */
-    final protected function getPostManager()
+    final protected function getPostManager(): PostManagerInterface
     {
         return $this->postManager;
     }

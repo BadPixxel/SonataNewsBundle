@@ -13,23 +13,14 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Sonata\NewsBundle\Event\FilterCommentResponseEvent;
-use Sonata\NewsBundle\Event\FormEvent;
-use Sonata\NewsBundle\Event\GetResponseCommentEvent;
+use Sonata\NewsBundle\Event\{FilterCommentResponseEvent,FormEvent,GetResponseCommentEvent};
 use Sonata\NewsBundle\Form\Type\CommentType;
 use Sonata\NewsBundle\Mailer\MailerInterface;
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\CommentInterface;
-use Sonata\NewsBundle\Model\CommentManagerInterface;
-use Sonata\NewsBundle\Model\PostInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
+use Sonata\NewsBundle\Model\{BlogInterface,CommentInterface,CommentManagerInterface,PostInterface,PostManagerInterface};
 use Sonata\NewsBundle\SonataNewsEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\{FormFactoryInterface,FormInterface};
+use Symfony\Component\HttpFoundation\{RedirectResponse,Request,Response};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -39,46 +30,50 @@ final class CreateCommentAction extends AbstractController
     /**
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
      * @var BlogInterface
      */
-    private $blog;
+    private BlogInterface $blog;
 
     /**
      * @var PostManagerInterface
      */
-    private $postManager;
+    private PostManagerInterface $postManager;
 
     /**
      * @var CommentManagerInterface
      */
-    private $commentManager;
+    private CommentManagerInterface $commentManager;
 
     /**
      * @var FormFactoryInterface
      */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     /**
      * @var MailerInterface
      */
-    private $mailer;
+    private MailerInterface $mailer;
 
     /**
      * @var EventDispatcherInterface|null
      */
-    private $eventDispatcher;
+    private ?EventDispatcherInterface $eventDispatcher;
 
-    // NEXT_MAJOR: Make $eventDispatcher a required dependency
-    public function __construct(
-        RouterInterface $router,
-        BlogInterface $blog,
-        PostManagerInterface $postManager,
-        CommentManagerInterface $commentManager,
-        FormFactoryInterface $formFactory,
-        MailerInterface $mailer,
+    /**
+     * NEXT_MAJOR: Make $eventDispatcher a required dependency
+     * @param RouterInterface $router
+     * @param BlogInterface $blog
+     * @param PostManagerInterface $postManager
+     * @param CommentManagerInterface $commentManager
+     * @param FormFactoryInterface $formFactory
+     * @param MailerInterface $mailer
+     * @param EventDispatcherInterface|null $eventDispatcher
+     */
+    public function __construct(RouterInterface $router, BlogInterface $blog, PostManagerInterface $postManager,
+        CommentManagerInterface $commentManager, FormFactoryInterface $formFactory, MailerInterface $mailer,
         ?EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->router = $router;
@@ -98,13 +93,12 @@ final class CreateCommentAction extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @param string $id
-     *
-     * @throws NotFoundHttpException
-     *
-     * @return Response
+     * @return RedirectResponse|Response
+     *@throws NotFoundHttpException
      */
-    public function __invoke(Request $request, $id)
+    public function __invoke(Request $request, string $id): RedirectResponse|Response
     {
         $post = $this->postManager->findOneBy([
             'id' => $id,
@@ -170,6 +164,10 @@ final class CreateCommentAction extends AbstractController
         ]);
     }
 
+    /**
+     * @param CommentInterface $comment
+     * @return FormInterface
+     */
     private function getCommentForm(CommentInterface $comment): FormInterface
     {
         return $this->formFactory->createNamed('comment', CommentType::class, $comment, [
@@ -180,6 +178,10 @@ final class CreateCommentAction extends AbstractController
         ]);
     }
 
+    /**
+     * @param PostInterface $post
+     * @return CommentInterface
+     */
     private function createComment(PostInterface $post): CommentInterface
     {
         $comment = $this->commentManager->create();

@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\CommentManagerInterface;
+use Sonata\NewsBundle\Model\{BlogInterface,CommentManagerInterface};
 use Sonata\NewsBundle\Util\HashGeneratorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -25,29 +24,32 @@ final class ModerateCommentAction
     /**
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
      * @var BlogInterface
      */
-    private $blog;
+    private BlogInterface $blog;
 
     /**
      * @var CommentManagerInterface
      */
-    private $commentManager;
+    private CommentManagerInterface $commentManager;
 
     /**
      * @var HashGeneratorInterface
      */
-    private $hashGenerator;
+    private HashGeneratorInterface $hashGenerator;
 
-    public function __construct(
-        RouterInterface $router,
-        BlogInterface $blog,
-        CommentManagerInterface $commentManager,
-        HashGeneratorInterface $hashGenerator
-    ) {
+    /**
+     * @param RouterInterface $router
+     * @param BlogInterface $blog
+     * @param CommentManagerInterface $commentManager
+     * @param HashGeneratorInterface $hashGenerator
+     */
+    public function __construct(RouterInterface $router, BlogInterface $blog, CommentManagerInterface $commentManager,
+        HashGeneratorInterface $hashGenerator)
+    {
         $this->router = $router;
         $this->blog = $blog;
         $this->commentManager = $commentManager;
@@ -58,12 +60,11 @@ final class ModerateCommentAction
      * @param string $commentId
      * @param string $hash
      * @param string $status
-     *
+     * @return RedirectResponse
      * @throws AccessDeniedException
      *
-     * @return RedirectResponse
      */
-    public function __invoke($commentId, $hash, $status)
+    public function __invoke(string $commentId, string $hash, string $status): RedirectResponse
     {
         $comment = $this->commentManager->findOneBy(['id' => $commentId]);
 

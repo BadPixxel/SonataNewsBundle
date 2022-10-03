@@ -13,26 +13,35 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\DependencyInjection;
 
+use Exception;
+use InvalidArgumentException;
 use Sonata\Doctrine\Mapper\Builder\OptionsBuilder;
 use Sonata\Doctrine\Mapper\DoctrineCollector;
 use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector as DeprecatedDoctrineCollector;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\{ContainerBuilder,Definition};
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * @final since sonata-project/news-bundle 3.x
  *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
-class SonataNewsExtension extends Extension
+final class SonataNewsExtension extends Extension
 {
     /**
      * @throws \InvalidArgumentException
+     * @throws Exception
+     */
+
+    /**
+     * @param array $configs
+     * @param ContainerBuilder $container
+     * @return void
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -104,8 +113,9 @@ class SonataNewsExtension extends Extension
 
     /**
      * @param array $config
+     * @param ContainerBuilder $container
      */
-    public function configureClass($config, ContainerBuilder $container): void
+    public function configureClass(array $config, ContainerBuilder $container): void
     {
         // admin configuration
         $container->setParameter('sonata.news.admin.post.entity', $config['class']['post']);
@@ -118,8 +128,9 @@ class SonataNewsExtension extends Extension
 
     /**
      * @param array $config
+     * @param ContainerBuilder $container
      */
-    public function configureAdmin($config, ContainerBuilder $container): void
+    public function configureAdmin(array $config, ContainerBuilder $container): void
     {
         $container->setParameter('sonata.news.admin.post.class', $config['admin']['post']['class']);
         $container->setParameter('sonata.news.admin.post.controller', $config['admin']['post']['controller']);
@@ -131,142 +142,9 @@ class SonataNewsExtension extends Extension
     }
 
     /**
-     * NEXT_MAJOR: Remove this method.
+     * @param array $config
+     * @return void
      */
-    public function registerDoctrineMapping(array $config): void
-    {
-        @trigger_error(
-            'Using SonataEasyExtendsBundle is deprecated since sonata-project/news-bundle 3.14. Please register SonataDoctrineBundle as a bundle instead.',
-            \E_USER_DEPRECATED
-        );
-
-        $collector = DeprecatedDoctrineCollector::getInstance();
-
-        foreach ($config['class'] as $type => $class) {
-            if (!class_exists($class)) {
-                /*
-                 * NEXT_MAJOR:
-                 * Throw an exception if the class is not defined
-                 */
-                @trigger_error(sprintf(
-                    'The "%s" class is not defined or does not exist. This is tolerated now but will be forbidden in 4.0',
-                    $class
-                ), \E_USER_DEPRECATED);
-
-                return;
-            }
-        }
-
-        $collector->addAssociation($config['class']['post'], 'mapOneToMany', [
-            'fieldName' => 'comments',
-            'targetEntity' => $config['class']['comment'],
-            'cascade' => [
-                    0 => 'remove',
-                    1 => 'persist',
-                ],
-            'mappedBy' => 'post',
-            'orphanRemoval' => true,
-            'orderBy' => [
-                    'createdAt' => 'DESC',
-                ],
-        ]);
-
-        $collector->addAssociation($config['class']['post'], 'mapManyToOne', [
-            'fieldName' => 'image',
-            'targetEntity' => $config['class']['media'],
-            'cascade' => [
-                    0 => 'remove',
-                    1 => 'persist',
-                    2 => 'refresh',
-                    3 => 'merge',
-                    4 => 'detach',
-                ],
-            'mappedBy' => null,
-            'inversedBy' => null,
-            'joinColumns' => [
-                    [
-                        'name' => 'image_id',
-                        'referencedColumnName' => 'id',
-                    ],
-                ],
-            'orphanRemoval' => false,
-        ]);
-
-        $collector->addAssociation($config['class']['post'], 'mapManyToOne', [
-            'fieldName' => 'author',
-            'targetEntity' => $config['class']['user'],
-            'cascade' => [
-                    1 => 'persist',
-                ],
-            'mappedBy' => null,
-            'inversedBy' => null,
-            'joinColumns' => [
-                    [
-                        'name' => 'author_id',
-                        'referencedColumnName' => 'id',
-                    ],
-                ],
-            'orphanRemoval' => false,
-        ]);
-
-        $collector->addAssociation($config['class']['post'], 'mapManyToOne', [
-            'fieldName' => 'collection',
-            'targetEntity' => $config['class']['collection'],
-            'cascade' => [
-                    1 => 'persist',
-                ],
-            'mappedBy' => null,
-            'inversedBy' => null,
-            'joinColumns' => [
-                    [
-                        'name' => 'collection_id',
-                        'referencedColumnName' => 'id',
-                    ],
-                ],
-            'orphanRemoval' => false,
-        ]);
-
-        $collector->addAssociation($config['class']['post'], 'mapManyToMany', [
-            'fieldName' => 'tags',
-            'targetEntity' => $config['class']['tag'],
-            'cascade' => [
-                    1 => 'persist',
-                ],
-            'joinTable' => [
-                    'name' => $config['table']['post_tag'],
-                    'joinColumns' => [
-                            [
-                                'name' => 'post_id',
-                                'referencedColumnName' => 'id',
-                            ],
-                        ],
-                    'inverseJoinColumns' => [
-                            [
-                                'name' => 'tag_id',
-                                'referencedColumnName' => 'id',
-                            ],
-                        ],
-                ],
-        ]);
-
-        $collector->addAssociation($config['class']['comment'], 'mapManyToOne', [
-            'fieldName' => 'post',
-            'targetEntity' => $config['class']['post'],
-            'cascade' => [
-            ],
-            'mappedBy' => null,
-            'inversedBy' => 'comments',
-            'joinColumns' => [
-                    [
-                        'name' => 'post_id',
-                        'referencedColumnName' => 'id',
-                        'nullable' => false,
-                    ],
-                ],
-            'orphanRemoval' => false,
-        ]);
-    }
-
     private function registerSonataDoctrineMapping(array $config): void
     {
         foreach ($config['class'] as $type => $class) {

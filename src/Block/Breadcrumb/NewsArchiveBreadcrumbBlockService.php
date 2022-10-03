@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Block\Breadcrumb;
 
+use Knp\Menu\ItemInterface;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,11 +26,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class NewsArchiveBreadcrumbBlockService extends BaseNewsBreadcrumbBlockService
 {
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'sonata.news.block.breadcrumb_archive';
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     * @return void
+     */
     public function configureSettings(OptionsResolver $resolver): void
     {
         parent::configureSettings($resolver);
@@ -40,7 +48,11 @@ class NewsArchiveBreadcrumbBlockService extends BaseNewsBreadcrumbBlockService
         ]);
     }
 
-    protected function getMenu(BlockContextInterface $blockContext)
+    /**
+     * @param BlockContextInterface $blockContext
+     * @return ItemInterface
+     */
+    protected function getMenu(BlockContextInterface $blockContext): ItemInterface
     {
         $menu = $this->getRootMenu($blockContext);
 

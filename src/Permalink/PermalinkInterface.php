@@ -13,18 +13,22 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Permalink;
 
+use InvalidArgumentException;
 use Sonata\NewsBundle\Model\PostInterface;
 
 interface PermalinkInterface
 {
-    public function generate(PostInterface $post);
+    /**
+     * @param PostInterface $post
+     * @return mixed
+     */
+    public function generate(PostInterface $post): mixed;
 
     /**
      * @param string $permalink
-     *
-     * @throws \InvalidArgumentException
-     *
      * @return array
+     * @throws InvalidArgumentException
+     *
      */
-    public function getParameters($permalink);
+    public function getParameters(string $permalink): array;
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Model;
 
+use DateTime;
+
 abstract class Comment implements CommentInterface
 {
     /**
@@ -20,123 +22,171 @@ abstract class Comment implements CommentInterface
      *
      * @var string|null
      */
-    protected $name;
+    protected ?string $name;
 
     /**
      * Email of the author.
      *
      * @var string|null
      */
-    protected $email;
+    protected ?string $email;
 
     /**
      * Website url of the author.
      *
      * @var string|null
      */
-    protected $url;
+    protected ?string $url;
 
     /**
      * Comment content.
      *
      * @var string
      */
-    protected $message;
+    protected string $message;
 
     /**
      * Comment created date.
      *
-     * @var \DateTime
+     * @var DateTime
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
      * Last update date.
      *
-     * @var \DateTime
+     * @var DateTime
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     /**
      * Moderation status.
      *
      * @var int
      */
-    protected $status = self::STATUS_VALID;
+    protected int $status = self::STATUS_VALID;
 
     /**
      * Post for which the comment is related to.
      *
      * @var PostInterface
      */
-    protected $post;
+    protected PostInterface $post;
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getName() ?: 'n-a';
     }
 
-    public function setName($name): void
+    /**
+     * @param string|null $name
+     * @return void
+     */
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
-    public function getName()
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setEmail($email): void
+    /**
+     * @param string|null $email
+     * @return void
+     */
+    public function setEmail(?string $email): void
     {
         $this->email = $email;
     }
 
-    public function getEmail()
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setUrl($url): void
+    /**
+     * @param string|null $url
+     * @return void
+     */
+    public function setUrl(?string $url): void
     {
         $this->url = $url;
     }
 
-    public function getUrl()
+    /**
+     * @return string|null
+     */
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    public function setMessage($message): void
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
 
-    public function getMessage()
+    /**
+     * @return string
+     */
+    public function getMessage(): string
     {
         return $this->message;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt = null): void
+    /**
+     * @param DateTime|null $createdAt
+     * @return void
+     */
+    public function setCreatedAt(?DateTime $createdAt = null): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getCreatedAt()
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt = null): void
+    /**
+     * @param DateTime|null $updatedAt
+     * @return void
+     */
+    public function setUpdatedAt(?DateTime $updatedAt = null): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function getUpdatedAt()
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public static function getStatusList()
+    /**
+     * @return string[]
+     */
+    public static function getStatusList(): array
     {
         return [
             self::STATUS_MODERATE => 'moderate',
@@ -145,34 +195,54 @@ abstract class Comment implements CommentInterface
         ];
     }
 
+    /**
+     * @return string|null
+     */
     public function getStatusCode()
     {
         $status = self::getStatusList();
 
-        return isset($status[$this->getStatus()]) ? $status[$this->getStatus()] : null;
+        return $status[$this->getStatus()] ?? null;
     }
 
+    /**
+     * @return void
+     */
     public function preUpdate(): void
     {
-        $this->setUpdatedAt(new \DateTime());
+        $this->setUpdatedAt(new DateTime());
     }
 
-    public function setStatus($status): void
+    /**
+     * @param int $status
+     * @return void
+     */
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
 
-    public function getStatus()
+    /**
+     * @return int
+     */
+    public function getStatus(): int
     {
         return $this->status;
     }
 
-    public function setPost($post): void
+    /**
+     * @param PostInterface $post
+     * @return void
+     */
+    public function setPost(PostInterface $post): void
     {
         $this->post = $post;
     }
 
-    public function getPost()
+    /**
+     * @return PostInterface
+     */
+    public function getPost(): PostInterface
     {
         return $this->post;
     }

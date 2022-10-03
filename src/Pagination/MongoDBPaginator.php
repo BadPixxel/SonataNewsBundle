@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Pagination;
 
+use Doctrine\ODM\MongoDB\MongoDBException;
 use Doctrine\ODM\MongoDB\Query\Builder;
 
 final class MongoDBPaginator extends BasePaginator
@@ -20,8 +21,12 @@ final class MongoDBPaginator extends BasePaginator
     /**
      * @var Builder
      */
-    protected $queryBuilder;
+    protected Builder $queryBuilder;
 
+    /**
+     * @param Builder $queryBuilder
+     * @param int $pageSize
+     */
     public function __construct(Builder $queryBuilder, int $pageSize = BasePaginator::PAGE_SIZE)
     {
         $this->queryBuilder = $queryBuilder;
@@ -29,6 +34,11 @@ final class MongoDBPaginator extends BasePaginator
         $this->numResults = $this->computeResultsCount();
     }
 
+    /**
+     * @param int $page
+     * @return $this
+     * @throws MongoDBException
+     */
     public function paginate(int $page = 1): self
     {
         $paginateQuery = clone $this->queryBuilder;
@@ -46,6 +56,10 @@ final class MongoDBPaginator extends BasePaginator
         return $this;
     }
 
+    /**
+     * @return int
+     * @throws MongoDBException
+     */
     private function computeResultsCount(): int
     {
         $countQuery = clone $this->queryBuilder;

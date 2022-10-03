@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-use Sonata\NewsBundle\Model\CommentInterface;
-use Sonata\NewsBundle\Model\PostInterface;
+use Doctrine\ORM\{EntityRepository,QueryBuilder};
+use Sonata\NewsBundle\Model\{CommentInterface,PostInterface};
 
 class BasePostRepository extends EntityRepository
 {
@@ -24,10 +22,9 @@ class BasePostRepository extends EntityRepository
      * return last post query builder.
      *
      * @param int $limit
-     *
      * @return QueryBuilder
      */
-    public function findLastPostQueryBuilder($limit)
+    public function findLastPostQueryBuilder(int $limit): QueryBuilder
     {
         return $this->createQueryBuilder('p')
             ->where('p.enabled = true')
@@ -38,10 +35,9 @@ class BasePostRepository extends EntityRepository
      * return count comments QueryBuilder.
      *
      * @param PostInterface $post
-     *
      * @return QueryBuilder
      */
-    public function countCommentsQuery($post)
+    public function countCommentsQuery(PostInterface $post): QueryBuilder
     {
         $qb = $this->createQueryBuilder('c');
 

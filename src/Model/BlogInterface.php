@@ -20,35 +20,35 @@ interface BlogInterface
     /**
      * @return string
      */
-    public function getTitle();
+    public function getTitle(): string;
 
     /**
      * @return string
      */
-    public function getLink();
+    public function getLink(): string;
 
     /**
      * @return string
      */
-    public function getDescription();
+    public function getDescription(): string;
 
     /**
      * @param string $title
      */
-    public function setTitle($title);
+    public function setTitle(string $title);
 
     /**
      * @param string $link
      */
-    public function setLink($link);
+    public function setLink(string $link);
 
     /**
      * @param string $description
      */
-    public function setDescription($description);
+    public function setDescription(string $description);
 
     /**
      * @return PermalinkInterface
      */
-    public function getPermalinkGenerator();
+    public function getPermalinkGenerator(): PermalinkInterface;
 }

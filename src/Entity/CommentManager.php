@@ -13,24 +13,24 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Entity;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Sonata\Doctrine\Entity\BaseEntityManager;
 use Sonata\Doctrine\Model\ManagerInterface;
-use Sonata\NewsBundle\Model\CommentInterface;
-use Sonata\NewsBundle\Model\CommentManagerInterface;
-use Sonata\NewsBundle\Model\PostInterface;
-use Sonata\NewsBundle\Pagination\BasePaginator;
-use Sonata\NewsBundle\Pagination\ORMPaginator;
+use Sonata\NewsBundle\Model\{CommentInterface,CommentManagerInterface,PostInterface};
+use Sonata\NewsBundle\Pagination\{BasePaginator,ORMPaginator};
 
 class CommentManager extends BaseEntityManager implements CommentManagerInterface
 {
     /**
      * @var ManagerInterface
      */
-    protected $postManager;
+    protected ManagerInterface $postManager;
 
     /**
-     * @param string $class
+     * @param $class
+     * @param ManagerRegistry $registry
+     * @param ManagerInterface $postManager
      */
     public function __construct($class, ManagerRegistry $registry, ManagerInterface $postManager)
     {
@@ -39,6 +39,11 @@ class CommentManager extends BaseEntityManager implements CommentManagerInterfac
         $this->postManager = $postManager;
     }
 
+    /**
+     * @param $comment
+     * @param $andFlush
+     * @return void
+     */
     public function save($comment, $andFlush = true): void
     {
         parent::save($comment, $andFlush);
@@ -48,6 +53,8 @@ class CommentManager extends BaseEntityManager implements CommentManagerInterfac
 
     /**
      * Update the number of comment for a comment.
+     * @param PostInterface|null $post
+     * @throws Exception
      */
     public function updateCommentsCount(?PostInterface $post = null): void
     {
@@ -66,6 +73,12 @@ class CommentManager extends BaseEntityManager implements CommentManagerInterfac
         $this->getConnection()->commit();
     }
 
+    /**
+     * @param $comment
+     * @param $andFlush
+     * @return void
+     * @throws Exception
+     */
     public function delete($comment, $andFlush = true): void
     {
         $post = $comment->getPost();
@@ -75,7 +88,14 @@ class CommentManager extends BaseEntityManager implements CommentManagerInterfac
         $this->updateCommentsCount($post);
     }
 
-    public function getPaginator(array $criteria = [], $page = 1, $limit = 10, array $sort = []): BasePaginator
+    /**
+     * @param array $criteria
+     * @param int $page
+     * @param int $limit
+     * @param array $sort
+     * @return BasePaginator
+     */
+    public function getPaginator(array $criteria = [], int $page = 1, int $limit = 10, array $sort = []): BasePaginator
     {
         if (!isset($criteria['mode'])) {
             $criteria['mode'] = 'public';
@@ -108,7 +128,7 @@ class CommentManager extends BaseEntityManager implements CommentManagerInterfac
      *
      * @return string
      */
-    private function getCommentsCountResetQuery($postTableName)
+    private function getCommentsCountResetQuery(string $postTableName): string
     {
         return sprintf('UPDATE %s SET comments_count = 0', $postTableName);
     }
@@ -119,7 +139,7 @@ class CommentManager extends BaseEntityManager implements CommentManagerInterfac
      *
      * @return string
      */
-    private function getCommentsCountQuery($postTableName, $commentTableName)
+    private function getCommentsCountQuery(string $postTableName, string $commentTableName): string
     {
         return sprintf(
             'UPDATE %s SET comments_count = (select COUNT(*) from %s where %s.id = %s.post_id)',

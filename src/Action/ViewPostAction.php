@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\PostInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
+use Sonata\NewsBundle\Model\{BlogInterface,PostInterface,PostManagerInterface};
 use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,28 +26,30 @@ final class ViewPostAction extends AbstractController
     /**
      * @var BlogInterface
      */
-    private $blog;
+    private BlogInterface $blog;
 
     /**
      * @var PostManagerInterface
      */
-    private $postManager;
+    private PostManagerInterface $postManager;
 
     /**
      * @var AuthorizationCheckerInterface
      */
-    private $authChecker;
+    private AuthorizationCheckerInterface $authChecker;
 
     /**
      * @var SeoPageInterface|null
      */
-    private $seoPage;
+    private ?SeoPageInterface $seoPage;
 
-    public function __construct(
-        BlogInterface $blog,
-        PostManagerInterface $postManager,
-        AuthorizationCheckerInterface $authChecker
-    ) {
+    /**
+     * @param BlogInterface $blog
+     * @param PostManagerInterface $postManager
+     * @param AuthorizationCheckerInterface $authChecker
+     */
+    public function __construct(BlogInterface $blog, PostManagerInterface $postManager, AuthorizationCheckerInterface $authChecker)
+    {
         $this->blog = $blog;
         $this->postManager = $postManager;
         $this->authChecker = $authChecker;
@@ -57,12 +57,10 @@ final class ViewPostAction extends AbstractController
 
     /**
      * @param string $permalink
-     *
-     * @throws NotFoundHttpException
-     *
      * @return Response
+     * @throws NotFoundHttpException
      */
-    public function __invoke($permalink)
+    public function __invoke(string $permalink): Response
     {
         $post = $this->postManager->findOneByPermalink($permalink, $this->blog);
 
@@ -89,15 +87,20 @@ final class ViewPostAction extends AbstractController
         ]);
     }
 
+    /**
+     * @param SeoPageInterface|null $seoPage
+     * @return void
+     */
     public function setSeoPage(?SeoPageInterface $seoPage = null): void
     {
         $this->seoPage = $seoPage;
     }
 
     /**
+     * @param PostInterface $post
      * @return bool
      */
-    protected function isVisible(PostInterface $post)
+    protected function isVisible(PostInterface $post): bool
     {
         return $post->isPublic() ||
             $this->authChecker->isGranted('ROLE_SUPER_ADMIN') ||

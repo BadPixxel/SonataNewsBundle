@@ -14,16 +14,20 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Event;
 
 use Sonata\NewsBundle\Model\CommentInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request,Response};
 
 final class FilterCommentResponseEvent extends CommentEvent
 {
     /**
      * @var Response
      */
-    private $response;
+    private Response $response;
 
+    /**
+     * @param CommentInterface $comment
+     * @param Request $request
+     * @param Response $response
+     */
     public function __construct(CommentInterface $comment, Request $request, Response $response)
     {
         parent::__construct($comment, $request);
@@ -31,11 +35,18 @@ final class FilterCommentResponseEvent extends CommentEvent
         $this->response = $response;
     }
 
+    /**
+     * @return Response
+     */
     public function getResponse(): Response
     {
         return $this->response;
     }
 
+    /**
+     * @param Response $response
+     * @return void
+     */
     public function setResponse(Response $response): void
     {
         $this->response = $response;

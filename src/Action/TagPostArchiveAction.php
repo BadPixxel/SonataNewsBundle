@@ -14,10 +14,8 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Action;
 
 use Sonata\ClassificationBundle\Model\TagManagerInterface;
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Sonata\NewsBundle\Model\{BlogInterface,PostManagerInterface};
+use Symfony\Component\HttpFoundation\{Request,Response};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,28 +24,27 @@ final class TagPostArchiveAction extends AbstractPostArchiveAction
     /**
      * @var TagManagerInterface
      */
-    private $tagManager;
+    private TagManagerInterface $tagManager;
 
     /**
+     * @param BlogInterface $blog
+     * @param PostManagerInterface $postManager
      * @param TranslatorInterface $translator
+     * @param TagManagerInterface $tagManager
      */
     public function __construct(
-        BlogInterface $blog,
-        PostManagerInterface $postManager,
-        object $translator,
-        TagManagerInterface $tagManager
-    ) {
+        BlogInterface $blog, PostManagerInterface $postManager, TranslatorInterface $translator, TagManagerInterface $tagManager)
+    {
         parent::__construct($blog, $postManager, $translator);
-
         $this->tagManager = $tagManager;
     }
 
     /**
+     * @param Request $request
      * @param string $tag
-     *
      * @return Response
      */
-    public function __invoke(Request $request, $tag)
+    public function __invoke(Request $request, string $tag): Response
     {
         $tag = $this->tagManager->findOneBy([
             'slug' => $tag,

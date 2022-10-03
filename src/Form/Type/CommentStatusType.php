@@ -21,6 +21,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CommentStatusType extends BaseStatusType
 {
+    /**
+     * @param OptionsResolver $resolver
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

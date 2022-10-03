@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace Sonata\NewsBundle\Event;
 
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request,Response};
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class FormEvent extends Event
@@ -23,39 +22,56 @@ final class FormEvent extends Event
     /**
      * @var FormInterface
      */
-    private $form;
+    private FormInterface $form;
 
     /**
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * @var Response|null
      */
-    private $response;
+    private ?Response $response;
 
+    /**
+     * @param FormInterface $form
+     * @param Request $request
+     */
     public function __construct(FormInterface $form, Request $request)
     {
         $this->form = $form;
         $this->request = $request;
     }
 
+    /**
+     * @return FormInterface
+     */
     public function getForm(): FormInterface
     {
         return $this->form;
     }
 
+    /**
+     * @return Request
+     */
     public function getRequest(): Request
     {
         return $this->request;
     }
 
+    /**
+     * @param Response $response
+     * @return void
+     */
     public function setResponse(Response $response): void
     {
         $this->response = $response;
     }
 
+    /**
+     * @return Response|null
+     */
     public function getResponse(): ?Response
     {
         return $this->response;

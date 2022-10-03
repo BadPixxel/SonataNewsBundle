@@ -15,35 +15,40 @@ namespace Sonata\NewsBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Exception\ModelManagerThrowable;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CommentAdminController extends CRUDController
 {
     /**
+     * @param ProxyQueryInterface $query
      * @return RedirectResponse
+     * @throws ModelManagerThrowable
      */
-    public function batchActionEnabled(ProxyQueryInterface $query)
+    public function batchActionEnabled(ProxyQueryInterface $query): RedirectResponse
     {
-        return $this->commentChangeStatus($query, true);
+        return $this->commentChangeStatus($query, 1);
     }
 
     /**
+     * @param ProxyQueryInterface $query
      * @return RedirectResponse
+     * @throws ModelManagerThrowable
      */
-    public function batchActionDisabled(ProxyQueryInterface $query)
+    public function batchActionDisabled(ProxyQueryInterface $query): RedirectResponse
     {
-        return $this->commentChangeStatus($query, false);
+        return $this->commentChangeStatus($query, 0);
     }
 
+
     /**
+     * @param ProxyQueryInterface $query
      * @param int $status
-     *
-     * @throws AccessDeniedException
-     *
      * @return RedirectResponse
+     * @throws ModelManagerThrowable
      */
-    protected function commentChangeStatus(ProxyQueryInterface $query, $status)
+    protected function commentChangeStatus(ProxyQueryInterface $query, int $status): RedirectResponse
     {
         if (false === $this->admin->isGranted('EDIT')) {
             throw new AccessDeniedException();

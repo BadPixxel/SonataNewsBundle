@@ -13,16 +13,22 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Exception;
 
+use Throwable;
+
 /**
- * @final since sonata-project/news-bundle 3.x
  *
  * @author Christian Gripp <mail@core23.de>
  */
-class NoDriverException extends \RuntimeException
+final class NoDriverException extends \RuntimeException
 {
     public const DEFAULT_MESSAGE = 'The child node "db_driver" at path "sonata_news" must be configured.';
 
-    public function __construct($message = self::DEFAULT_MESSAGE, $code = 0, ?\Throwable $previous = null)
+    /**
+     * @param $message
+     * @param $code
+     * @param Throwable|null $previous
+     */
+    public function __construct($message = self::DEFAULT_MESSAGE, $code = 0, ?Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

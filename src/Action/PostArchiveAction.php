@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request,Response};
 
 final class PostArchiveAction extends AbstractPostArchiveAction
 {
     /**
+     * @param Request $request
      * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         if ($seoPage = $this->getSeoPage()) {
             $seoPage

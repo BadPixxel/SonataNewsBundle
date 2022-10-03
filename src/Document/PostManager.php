@@ -13,22 +13,21 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Document;
 
+use Exception;
 use Sonata\ClassificationBundle\Model\CollectionInterface;
 use Sonata\Doctrine\Document\BaseDocumentManager;
-use Sonata\NewsBundle\Model\BlogInterface;
-use Sonata\NewsBundle\Model\PostInterface;
-use Sonata\NewsBundle\Model\PostManagerInterface;
-use Sonata\NewsBundle\Pagination\BasePaginator;
-use Sonata\NewsBundle\Pagination\MongoDBPaginator;
+use Sonata\NewsBundle\Model\{BlogInterface,PostInterface,PostManagerInterface};
+use Sonata\NewsBundle\Pagination\{BasePaginator,MongoDBPaginator};
 
 class PostManager extends BaseDocumentManager implements PostManagerInterface
 {
     /**
      * @param string $permalink
-     *
+     * @param BlogInterface $blog
      * @return PostInterface|null
+     * @throws Exception
      */
-    public function findOneByPermalink($permalink, BlogInterface $blog)
+    public function findOneByPermalink(string $permalink, BlogInterface $blog): ?PostInterface
     {
         $query = $this->getRepository()->createQueryBuilder('p');
 
@@ -75,7 +74,14 @@ class PostManager extends BaseDocumentManager implements PostManagerInterface
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function getPublicationDateQueryParts($date, $step, $alias = 'p')
+    /**
+     * @param string $date
+     * @param string $step
+     * @param string $alias
+     * @return array
+     * @throws Exception
+     */
+    public function getPublicationDateQueryParts(string $date, string $step, string $alias = 'p'): array
     {
         return [
             'query' => sprintf('%s.publicationDateStart >= :startDate AND %s.publicationDateStart < :endDate', $alias, $alias),
@@ -86,7 +92,14 @@ class PostManager extends BaseDocumentManager implements PostManagerInterface
         ];
     }
 
-    public function getPaginator(array $criteria = [], $page = 1, $limit = 10, array $sort = []): BasePaginator
+    /**
+     * @param array $criteria
+     * @param int $page
+     * @param int $limit
+     * @param array $sort
+     * @return BasePaginator
+     */
+    public function getPaginator(array $criteria = [], int $page = 1, int $limit = 10, array $sort = []): BasePaginator
     {
         if (!isset($criteria['mode'])) {
             $criteria['mode'] = 'public';
@@ -140,7 +153,7 @@ class PostManager extends BaseDocumentManager implements PostManagerInterface
      *
      * @return array
      */
-    final protected function getPublicationCollectionQueryParts($collection)
+    final protected function getPublicationCollectionQueryParts(string $collection): array
     {
         $queryParts = ['query' => '', 'params' => []];
 

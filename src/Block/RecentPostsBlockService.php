@@ -22,34 +22,36 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\Doctrine\Model\ManagerInterface;
 use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\NewsBundle\Model\PostManagerInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\{ChoiceType,IntegerType,TextType};
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 /**
+ * NEXT MAJOR: replace reference of ManagerInterface by CommentManagerInterface
+ *
  * @final since sonata-project/news-bundle 3.x
  *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
-class RecentPostsBlockService extends AbstractAdminBlockService
+final class RecentPostsBlockService extends AbstractAdminBlockService
 {
     /**
-     * @var PostManagerInterface
+     * @var ManagerInterface|PostManagerInterface
      */
-    protected $manager;
+    protected ManagerInterface|PostManagerInterface $manager;
 
     /**
      * @var Pool
      */
-    private $adminPool;
+    private ?Pool $adminPool;
 
     /**
      * @param string $name
-     * @param Pool   $adminPool
+     * @param Environment $templating
+     * @param ManagerInterface $postManager
+     * @param Pool|null $adminPool
      */
-    public function __construct($name, Environment $templating, ManagerInterface $postManager, ?Pool $adminPool = null)
+    public function __construct(string $name, Environment $templating, ManagerInterface $postManager, ?Pool $adminPool = null)
     {
         if (!$postManager instanceof PostManagerInterface) {
             @trigger_error(
