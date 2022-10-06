@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Sonata\IntlBundle\Templating\Helper\DateTimeHelper;
+use Sonata\IntlBundle\Helper\DateTimeFormatter;
 use Sonata\NewsBundle\Model\{BlogInterface,PostManagerInterface};
 use Symfony\Component\HttpFoundation\{Request,Response};
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -24,9 +24,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class MonthlyPostArchiveAction extends AbstractPostArchiveAction
 {
     /**
-     * @var DateTimeHelper
+     * @var DateTimeFormatter
      */
-    private DateTimeHelper $dateTimeHelper;
+    private DateTimeFormatter $dateTimeHelper;
 
     /**
      * @param BlogInterface $blog
@@ -35,7 +35,7 @@ final class MonthlyPostArchiveAction extends AbstractPostArchiveAction
      * @param DateTimeHelper $dateTimeHelper
      */
     public function __construct(BlogInterface $blog, PostManagerInterface $postManager, TranslatorInterface $translator,
-        DateTimeHelper $dateTimeHelper)
+    DateTimeFormatter $dateTimeHelper)
     {
         parent::__construct($blog, $postManager, $translator);
         $this->dateTimeHelper = $dateTimeHelper;

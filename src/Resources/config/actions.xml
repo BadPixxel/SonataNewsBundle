@@ -41,7 +41,7 @@
             <argument type="service" id="sonata.news.blog"/>
             <argument type="service" id="sonata.news.manager.post"/>
             <argument type="service" id="translator"/>
-            <argument type="service" id="sonata.intl.templating.helper.datetime"/>
+            <argument type="service" id="sonata.intl.helper.datetime"/>
             <call method="setSeoPage">
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
             </call>
@@ -53,7 +53,7 @@
             <argument type="service" id="sonata.news.blog"/>
             <argument type="service" id="sonata.news.manager.post"/>
             <argument type="service" id="translator"/>
-            <argument type="service" id="sonata.intl.templating.helper.datetime"/>
+            <argument type="service" id="sonata.intl.helper.datetime"/>
             <call method="setSeoPage">
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
             </call>

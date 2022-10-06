@@ -437,7 +437,7 @@ abstract class Post implements PostInterface
     /**
      * @return int
      */
-    public function getCommentsCount()
+    public function getCommentsCount(): int
     {
         return $this->commentsCount;
     }

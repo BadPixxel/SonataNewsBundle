@@ -84,7 +84,7 @@ final class Mailer implements MailerInterface
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function sendCommentNotification(CommentInterface $comment): void
+    public function sendCommentNotification(CommentInterface $comment): mixed
     {
         $rendered = $this->templating->render($this->emails['notification']['template'], [
             'comment' => $comment,

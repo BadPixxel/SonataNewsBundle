@@ -23,12 +23,12 @@ use Sonata\Twig\Status\StatusClassRendererInterface;
  */
 class CommentStatusRenderer implements StatusClassRendererInterface
 {
-    public function handlesObject($object, $statusName = null)
+    public function handlesObject($object, $statusName = null): bool
     {
         return $object instanceof CommentInterface;
     }
 
-    public function getStatusClass($object, $statusName = null, $default = '')
+    public function getStatusClass($object, $statusName = null, $default = ''): string
     {
         switch ($object->getStatus()) {
             case CommentInterface::STATUS_INVALID:

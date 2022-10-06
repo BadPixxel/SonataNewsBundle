@@ -198,7 +198,7 @@ abstract class Comment implements CommentInterface
     /**
      * @return string|null
      */
-    public function getStatusCode()
+    public function getStatusCode(): ?string
     {
         $status = self::getStatusList();
 

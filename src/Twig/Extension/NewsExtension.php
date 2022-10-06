@@ -19,15 +19,13 @@ use Sonata\NewsBundle\Model\BlogInterface;
 use Sonata\NewsBundle\Model\PostInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Twig\Environment;
 use Twig\Extension\AbstractExtension;
-use Twig\Extension\InitRuntimeInterface;
 use Twig\TwigFunction;
 
 /**
  * @final since sonata-project/news-bundle 3.x
  */
-class NewsExtension extends AbstractExtension implements InitRuntimeInterface
+class NewsExtension extends AbstractExtension
 {
     /**
      * @var RouterInterface
@@ -39,10 +37,6 @@ class NewsExtension extends AbstractExtension implements InitRuntimeInterface
      */
     private $tagManager;
 
-    /**
-     * @var Environment
-     */
-    private $environment;
 
     /**
      * @var BlogInterface
@@ -82,11 +76,6 @@ class NewsExtension extends AbstractExtension implements InitRuntimeInterface
                 [$this, 'generatePermalink']
             ),
         ];
-    }
-
-    public function initRuntime(Environment $environment): void
-    {
-        $this->environment = $environment;
     }
 
     /**
