@@ -30,7 +30,7 @@
         "sonata-project/formatter-bundle": "^5.0.0",
         "sonata-project/intl-bundle": "^2.14 || ^3.0.0",
         "sonata-project/media-bundle": "^4.5.1",
-        "sonata-project/twig-extensions": "^1.12.0",
+        "sonata-project/twig-extensions": "^1.12.0 || ^2.0.0",
         "symfony/config": "^5.1 || ^6.1",
         "symfony/console": "^5.1 || ^6.1",
         "symfony/dependency-injection": "^5.1 || ^6.1",
