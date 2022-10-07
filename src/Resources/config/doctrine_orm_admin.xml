@@ -12,9 +12,10 @@
             <argument>%sonata.news.admin.post.controller%</argument>
             <argument type="service" id="parameter_bag"/>
             <argument type="service" id="translator.data_collector"/>
-            <call method="setUserManager">
+            <!--@TODO:Reemplazar el servicio por el dado por Symfony 6-->
+            <!--<call method="setUserManager">
                 <argument type="service" id="fos_user.user_manager" on-invalid="null"/>
-            </call>
+            </call>-->
             <call method="setPoolFormatter">
                 <argument type="service" id="sonata.formatter.pool"/>
             </call>
