@@ -15,10 +15,7 @@ namespace Sonata\NewsBundle\Permalink;
 
 use Sonata\NewsBundle\Model\PostInterface;
 
-/**
- * @final since sonata-project/news-bundle 3.x
- */
-class DatePermalink implements PermalinkInterface
+final class DatePermalink implements PermalinkInterface
 {
     /**
      * @var string

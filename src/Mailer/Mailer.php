@@ -21,9 +21,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use Twig\Error\{LoaderError,RuntimeError,SyntaxError};
 
 final class Mailer implements MailerInterface
 {
@@ -79,10 +77,11 @@ final class Mailer implements MailerInterface
 
     /**
      * @param CommentInterface $comment
-     * @return void
+     * @return mixed
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws TransportExceptionInterface
      */
     public function sendCommentNotification(CommentInterface $comment): mixed
     {

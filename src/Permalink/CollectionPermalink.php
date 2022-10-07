@@ -15,10 +15,7 @@ namespace Sonata\NewsBundle\Permalink;
 
 use Sonata\NewsBundle\Model\PostInterface;
 
-/**
- * @final since sonata-project/news-bundle 3.x
- */
-class CollectionPermalink implements PermalinkInterface
+final class CollectionPermalink implements PermalinkInterface
 {
     /**
      * @param PostInterface $post
@@ -43,7 +40,7 @@ class CollectionPermalink implements PermalinkInterface
             throw new \InvalidArgumentException('wrong permalink format');
         }
 
-        if (false === strpos($permalink, '/')) {
+        if (!str_contains($permalink, '/')) {
             $collection = null;
             $slug = $permalink;
         } else {
