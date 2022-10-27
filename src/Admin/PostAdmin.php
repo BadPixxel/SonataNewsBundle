@@ -120,6 +120,10 @@ class PostAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $form): void
     {
+        $listener = function (FormEvent $event) {
+            // ...
+        };
+
         $isHorizontal = 'horizontal' === $this->params->get('sonata.form.form_type');
         $form
             ->with('group_post', [
@@ -131,7 +135,7 @@ class PostAdmin extends AbstractAdmin
                     'attr' => ['rows' => 5],
                 ])
                 ->add('content', FormatterType::class, [
-                    'event_dispatcher' => $form->getFormBuilder()->getEventDispatcher(),
+                    //'event_dispatcher' => $form->getFormBuilder()->getEventDispatcher(),
                     'format_field' => 'contentFormatter',
                     'source_field' => 'rawContent',
                     'source_field_options' => [

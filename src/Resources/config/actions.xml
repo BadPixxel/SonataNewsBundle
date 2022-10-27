@@ -62,14 +62,14 @@
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\PostArchiveAction" class="Sonata\NewsBundle\Action\PostArchiveAction" public="true">
+            <argument type="service_locator">
+                <argument type="service" key="twig" id="twig"/>
+            </argument>
             <argument type="service" id="sonata.news.blog"/>
             <argument type="service" id="sonata.news.manager.post"/>
             <argument type="service" id="translator"/>
             <call method="setSeoPage">
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
-            </call>
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\ViewPostAction" class="Sonata\NewsBundle\Action\ViewPostAction" public="true">

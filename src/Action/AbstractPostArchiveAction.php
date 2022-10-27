@@ -18,6 +18,7 @@ use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{Request,Response};
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Psr\Container\ContainerInterface;
 
 abstract class AbstractPostArchiveAction extends AbstractController
 {
@@ -46,8 +47,10 @@ abstract class AbstractPostArchiveAction extends AbstractController
      * @param PostManagerInterface $postManager
      * @param TranslatorInterface $translator
      */
-    public function __construct(BlogInterface $blog, PostManagerInterface $postManager, TranslatorInterface $translator)
+    public function __construct(ContainerInterface $container,BlogInterface $blog, PostManagerInterface $postManager,
+                                TranslatorInterface $translator)
     {
+        parent::setContainer($container);
         $this->blog = $blog;
         $this->postManager = $postManager;
         $this->translator = $translator;
