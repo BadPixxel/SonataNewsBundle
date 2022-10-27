@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- NEXT_MAJOR: remove the "class" and "public" attributes -->
         <service id="Sonata\NewsBundle\Action\CollectionPostArchiveAction" class="Sonata\NewsBundle\Action\CollectionPostArchiveAction" public="true">
@@ -11,7 +12,9 @@
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
             </call>
             <call method="setContainer">
-                <argument type="service" id="service_container"/>
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\TagPostArchiveAction" class="Sonata\NewsBundle\Action\TagPostArchiveAction" public="true">
@@ -23,7 +26,9 @@
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
             </call>
             <call method="setContainer">
-                <argument type="service" id="service_container"/>
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\YearlyPostArchiveAction" class="Sonata\NewsBundle\Action\YearlyPostArchiveAction" public="true">
@@ -34,7 +39,9 @@
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
             </call>
             <call method="setContainer">
-                <argument type="service" id="service_container"/>
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\MonthlyPostArchiveAction" class="Sonata\NewsBundle\Action\MonthlyPostArchiveAction" public="true">
@@ -46,7 +53,9 @@
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
             </call>
             <call method="setContainer">
-                <argument type="service" id="service_container"/>
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\DailyPostArchiveAction" class="Sonata\NewsBundle\Action\DailyPostArchiveAction" public="true">
@@ -58,18 +67,22 @@
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
             </call>
             <call method="setContainer">
-                <argument type="service" id="service_container"/>
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\PostArchiveAction" class="Sonata\NewsBundle\Action\PostArchiveAction" public="true">
-            <argument type="service_locator">
-                <argument type="service" key="twig" id="twig"/>
-            </argument>
             <argument type="service" id="sonata.news.blog"/>
             <argument type="service" id="sonata.news.manager.post"/>
             <argument type="service" id="translator"/>
             <call method="setSeoPage">
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
+            </call>
+            <call method="setContainer">
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\ViewPostAction" class="Sonata\NewsBundle\Action\ViewPostAction" public="true">
@@ -80,7 +93,9 @@
                 <argument type="service" id="sonata.seo.page" on-invalid="null"/>
             </call>
             <call method="setContainer">
-                <argument type="service" id="service_container"/>
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\ModerateCommentAction" class="Sonata\NewsBundle\Action\ModerateCommentAction" public="true">
@@ -104,7 +119,9 @@
             <argument type="service" id="sonata.news.mailer"/>
             <argument type="service" id="event_dispatcher"/>
             <call method="setContainer">
-                <argument type="service" id="service_container"/>
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
         <service id="Sonata\NewsBundle\Action\CreateCommentFormAction" class="Sonata\NewsBundle\Action\CreateCommentFormAction" public="true">
@@ -113,7 +130,9 @@
             <argument type="service" id="sonata.news.manager.comment"/>
             <argument type="service" id="form.factory"/>
             <call method="setContainer">
-                <argument type="service" id="service_container"/>
+                <argument type="service_locator">
+                    <argument type="service" key="twig" id="twig"/>
+                </argument>
             </call>
         </service>
     </services>

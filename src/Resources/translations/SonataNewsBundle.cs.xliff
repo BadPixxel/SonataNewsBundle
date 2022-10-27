@@ -42,12 +42,12 @@
         <source>breadcrumb.link_comment_edit</source>
         <target>Upravit</target>
       </trans-unit>
-      <trans-unit id="breadcrumb.link_post_create">
-        <source>breadcrumb.link_post_create</source>
+      <trans-unit id="breadcrumb.link_sonata_news_post_create">
+        <source>breadcrumb.link_sonata_news_post_create</source>
         <target>Vytvořit</target>
       </trans-unit>
-      <trans-unit id="breadcrumb.link_post_list">
-        <source>breadcrumb.link_post_list</source>
+      <trans-unit id="breadcrumb.link_sonata_news_post_list">
+        <source>breadcrumb.link_sonata_news_post_list</source>
         <target>Příspěvky</target>
       </trans-unit>
       <trans-unit id="breadcrumb.link_post_edit">
@@ -263,8 +263,8 @@ Rychlé odkazy na moderování
         <source>filter.label_message</source>
         <target>Zpráva</target>
       </trans-unit>
-      <trans-unit id="form_label_post">
-        <source>form.label_post</source>
+      <trans-unit id="form_group_post">
+        <source>form.group_post</source>
         <target>Post</target>
       </trans-unit>
       <trans-unit id="form_label_name">
@@ -283,8 +283,8 @@ Rychlé odkazy na moderování
         <source>form.label_message</source>
         <target>Zpráva</target>
       </trans-unit>
-      <trans-unit id="form_label_status">
-        <source>form.label_status</source>
+      <trans-unit id="form_group_status">
+        <source>form.group_status</source>
         <target>Status</target>
       </trans-unit>
       <trans-unit id="list_label_slug">
@@ -423,7 +423,7 @@ Rychlé odkazy na moderování
         <source>group_status</source>
         <target>group_status</target>
       </trans-unit>
-      <trans-unit id="group_classification">
+      <trans-unit id="form.group_classification">
         <source>group_classification</source>
         <target>group_classification</target>
       </trans-unit>

@@ -1,22 +1,37 @@
 <?xml version="1.0"?>
-	<rss version="2.0">
+	<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" version="2.0">
 		<channel>
-			<title>{{ blog.title }}
-			{%if tag %}:{{ tag.name }}{%endif%}</title>
-			<link>{{ blog.link }}</link>
+			<title>{{ blog.title }}{%if tag %} - {{ tag.name }}{%endif%}</title>
 			<description>{{ blog.description }}</description>
+			<image>
+				<url>@TODO: Falta por asignar</url>
+				<title>{{ blog.title }}{%if tag %} - {{ tag.name }}{%endif%}</title>
+				<link>{{ blog.link }}</link>
+			</image>
 			<pubDate>{{ 'now'|date('D, d M Y H:i:s O', 'UTC') }}</pubDate>
 			<lastBuildDate>{{ 'now'|date('D, d M Y H:i:s O', 'UTC') }}</lastBuildDate>
+			<generator>Wf Feed Generator ({{ blog.link }})</generator>
+			<link>{{ blog.link }}</link>
+			{%if tag %}
+				<category>{{ tag.name }}</category>
+			{%endif%}
+			<atom:link rel="self" type="application/rss+xml" href="{{ app.request.uri }}.xml"/>
 			{% for post in pager.getResults() %}
 				<item>
 					<title>{{ post.title }}</title>
-					<link>{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }, true) }}</link>
-					<description>
-						<![CDATA[ {{ post.abstract }} ]]>
-					</description>
 					<pubDate>{{ post.publicationDateStart | date('D, d M Y H:i:s O', 'UTC') }}</pubDate>
-					<enclosure type="image/jpeg" length="727618" url="{{ sonata_path(post.image, 'large') }}"/>
-					<guid>{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }, true) }}</guid>
+					<link>{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }, false) }}</link>
+					<guid>{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }, false) }}</guid>
+					<category>
+						{% for Tag in post.getTags() %}
+						{{ Tag }}
+						{% endfor %}
+					</category>
+					<description>
+						{{ post.abstract }}
+					</description>
+					<enclosure type="image/jpeg" length="{{ post.image.getSize() }}" url="{{ sonata_path(post.image, 'wide') }}"/>
+					<slash:comments>{{ post.commentsCount }}</slash:comments>
 				</item>
 			{% endfor %}
 		</channel>

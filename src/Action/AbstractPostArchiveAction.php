@@ -47,10 +47,8 @@ abstract class AbstractPostArchiveAction extends AbstractController
      * @param PostManagerInterface $postManager
      * @param TranslatorInterface $translator
      */
-    public function __construct(ContainerInterface $container,BlogInterface $blog, PostManagerInterface $postManager,
-                                TranslatorInterface $translator)
+    public function __construct(BlogInterface $blog, PostManagerInterface $postManager,TranslatorInterface $translator)
     {
-        parent::setContainer($container);
         $this->blog = $blog;
         $this->postManager = $postManager;
         $this->translator = $translator;
@@ -78,7 +76,6 @@ abstract class AbstractPostArchiveAction extends AbstractController
             'route' => $request->get('_route'),
             'route_parameters' => $request->get('_route_params'),
         ], $parameters);
-
         $response = $this->render(
             sprintf('@SonataNews/Post/archive.%s.twig', $request->getRequestFormat()),
             $parameters

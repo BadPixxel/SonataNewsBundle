@@ -42,12 +42,12 @@
         <source>breadcrumb.link_comment_edit</source>
         <target>Upraviť</target>
       </trans-unit>
-      <trans-unit id="breadcrumb.link_post_create">
-        <source>breadcrumb.link_post_create</source>
+      <trans-unit id="breadcrumb.link_sonata_news_post_create">
+        <source>breadcrumb.link_sonata_news_post_create</source>
         <target>Vytvoriť</target>
       </trans-unit>
-      <trans-unit id="breadcrumb.link_post_list">
-        <source>breadcrumb.link_post_list</source>
+      <trans-unit id="breadcrumb.link_sonata_news_post_list">
+        <source>breadcrumb.link_sonata_news_post_list</source>
         <target>Príspevky</target>
       </trans-unit>
       <trans-unit id="breadcrumb.link_post_edit">
@@ -263,8 +263,8 @@ Rýchle odkazy na moderovanie:
         <source>filter.label_message</source>
         <target>Správa</target>
       </trans-unit>
-      <trans-unit id="form_label_post">
-        <source>form.label_post</source>
+      <trans-unit id="form_group_post">
+        <source>form.group_post</source>
         <target>Post</target>
       </trans-unit>
       <trans-unit id="form_label_name">
@@ -283,8 +283,8 @@ Rýchle odkazy na moderovanie:
         <source>form.label_message</source>
         <target>Správa</target>
       </trans-unit>
-      <trans-unit id="form_label_status">
-        <source>form.label_status</source>
+      <trans-unit id="form_group_status">
+        <source>form.group_status</source>
         <target>Status</target>
       </trans-unit>
       <trans-unit id="list_label_slug">
@@ -423,9 +423,9 @@ Rýchle odkazy na moderovanie:
         <source>group_status</source>
         <target>group_status</target>
       </trans-unit>
-      <trans-unit id="group_classification">
-        <source>group_classification</source>
-        <target>group_classification</target>
+      <trans-unit id="form.group_classification">
+        <source>form.group_classification</source>
+        <target>form.group_classification</target>
       </trans-unit>
       <trans-unit id="sonata_news_block_recent_comments">
         <source>sonata.news.block.recent_comments</source>

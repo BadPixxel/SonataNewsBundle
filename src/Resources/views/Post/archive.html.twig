@@ -44,7 +44,7 @@
                         {% else %}
                             <i class="icon-tag"></i>
                         {% endif %}
-                        {{ 'published_under'|trans(post.tags|length, {}, 'SonataNewsBundle') }}
+                        {{ 'published_under'|trans( {'%count%':post.tags|length}, 'SonataNewsBundle') }}
 
                         {% for tag in post.tags %}
                             <a href="{{ url('sonata_news_tag', { 'tag': tag.slug } ) }}">{{ tag.name }}</a>{% if not loop.last %},{% endif %}

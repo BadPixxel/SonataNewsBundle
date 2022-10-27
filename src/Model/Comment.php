@@ -189,9 +189,9 @@ abstract class Comment implements CommentInterface
     public static function getStatusList(): array
     {
         return [
-            self::STATUS_MODERATE => 'moderate',
-            self::STATUS_INVALID => 'invalid',
-            self::STATUS_VALID => 'valid',
+            'moderate' => self::STATUS_MODERATE,
+            'invalid' => self::STATUS_INVALID,
+            'valid' => self::STATUS_VALID,
         ];
     }
 

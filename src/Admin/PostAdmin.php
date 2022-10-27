@@ -120,13 +120,9 @@ class PostAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $form): void
     {
-        $listener = function (FormEvent $event) {
-            // ...
-        };
-
         $isHorizontal = 'horizontal' === $this->params->get('sonata.form.form_type');
         $form
-            ->with('group_post', [
+            ->with('post', [
                     'class' => 'col-md-8',
                 ])
                  ->add('author', ModelListType::class)
@@ -147,7 +143,7 @@ class PostAdmin extends AbstractAdmin
                     'listener' => true,
                 ])
             ->end()
-            ->with('group_status', [
+            ->with('status', [
                     'class' => 'col-md-4',
                 ])
                 ->add('enabled', CheckboxType::class, ['required' => false])
@@ -173,7 +169,7 @@ class PostAdmin extends AbstractAdmin
                 ])
             ->end()
 
-            ->with('group_classification', [
+            ->with('classification', [
                 'class' => 'col-md-4',
                 ])
                  ->add('tags', ModelAutocompleteType::class, [

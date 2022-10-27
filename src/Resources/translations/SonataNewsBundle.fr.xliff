@@ -42,12 +42,12 @@
         <source>breadcrumb.link_comment_edit</source>
         <target>Editer</target>
       </trans-unit>
-      <trans-unit id="breadcrumb.link_post_create">
-        <source>breadcrumb.link_post_create</source>
+      <trans-unit id="breadcrumb.link_sonata_news_post_create">
+        <source>breadcrumb.link_sonata_news_post_create</source>
         <target>Ajouter</target>
       </trans-unit>
-      <trans-unit id="breadcrumb.link_post_list">
-        <source>breadcrumb.link_post_list</source>
+      <trans-unit id="breadcrumb.link_sonata_news_post_list">
+        <source>breadcrumb.link_sonata_news_post_list</source>
         <target>Articles</target>
       </trans-unit>
       <trans-unit id="breadcrumb.link_post_edit">
@@ -263,8 +263,8 @@ Liens de modération rapide :
         <source>filter.label_message</source>
         <target>Message</target>
       </trans-unit>
-      <trans-unit id="form_label_post">
-        <source>form.label_post</source>
+      <trans-unit id="form_group_post">
+        <source>form.group_post</source>
         <target>Article</target>
       </trans-unit>
       <trans-unit id="form_label_name">
@@ -283,8 +283,8 @@ Liens de modération rapide :
         <source>form.label_message</source>
         <target>Message</target>
       </trans-unit>
-      <trans-unit id="form_label_status">
-        <source>form.label_status</source>
+      <trans-unit id="form_group_status">
+        <source>form.group_status</source>
         <target>Statut</target>
       </trans-unit>
       <trans-unit id="list_label_slug">
@@ -423,8 +423,8 @@ Liens de modération rapide :
         <source>group_status</source>
         <target>Statut</target>
       </trans-unit>
-      <trans-unit id="group_classification">
-        <source>group_classification</source>
+      <trans-unit id="form.group_classification">
+        <source>form.group_classification</source>
         <target>Classification</target>
       </trans-unit>
       <trans-unit id="sonata_news_block_recent_comments">

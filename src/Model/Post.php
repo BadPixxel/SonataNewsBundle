@@ -117,6 +117,8 @@ abstract class Post implements PostInterface
      */
     protected ?CollectionInterface $collection;
 
+    protected $custom;
+
     public function __construct()
     {
         $this->setPublicationDateStart(new DateTime());
@@ -553,5 +555,11 @@ abstract class Post implements PostInterface
     public function getRawContent(): string
     {
         return $this->rawContent;
+    }
+
+
+    public function getCustom()
+    {
+        return $this->custom;
     }
 }
