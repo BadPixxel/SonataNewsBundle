@@ -13,25 +13,23 @@ declare(strict_types=1);
 
 namespace Sonata\NewsBundle\Action;
 
-use Sonata\NewsBundle\Event\{FilterCommentResponseEvent,FormEvent,GetResponseCommentEvent};
+use Sonata\NewsBundle\Event\{FilterCommentResponseEvent, FormEvent, GetResponseCommentEvent};
 use Sonata\NewsBundle\Form\Type\CommentType;
 use Sonata\NewsBundle\Mailer\MailerInterface;
-use Sonata\NewsBundle\Model\{BlogInterface,CommentInterface,CommentManagerInterface,PostInterface,PostManagerInterface};
+use Sonata\NewsBundle\Model\{BlogInterface,
+    CommentInterface,
+    CommentManagerInterface,
+    PostInterface,
+    PostManagerInterface};
 use Sonata\NewsBundle\SonataNewsEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\{FormFactoryInterface,FormInterface};
-use Symfony\Component\HttpFoundation\{RedirectResponse,Request,Response};
+use Symfony\Component\Form\{FormFactoryInterface, FormInterface};
+use Symfony\Component\HttpFoundation\{RedirectResponse, Request, Response};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class CreateCommentAction extends AbstractController
 {
-    /**
-     * @var RouterInterface
-     */
-    private RouterInterface $router;
-
     /**
      * @var BlogInterface
      */
@@ -48,55 +46,38 @@ final class CreateCommentAction extends AbstractController
     private CommentManagerInterface $commentManager;
 
     /**
-     * @var FormFactoryInterface
-     */
-    private FormFactoryInterface $formFactory;
-
-    /**
      * @var MailerInterface
      */
     private MailerInterface $mailer;
 
     /**
-     * @var EventDispatcherInterface|null
+     * @var EventDispatcherInterface
      */
-    private ?EventDispatcherInterface $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
-     * NEXT_MAJOR: Make $eventDispatcher a required dependency
-     * @param RouterInterface $router
      * @param BlogInterface $blog
      * @param PostManagerInterface $postManager
      * @param CommentManagerInterface $commentManager
-     * @param FormFactoryInterface $formFactory
      * @param MailerInterface $mailer
      * @param EventDispatcherInterface|null $eventDispatcher
      */
-    public function __construct(RouterInterface $router, BlogInterface $blog, PostManagerInterface $postManager,
-        CommentManagerInterface $commentManager, FormFactoryInterface $formFactory, MailerInterface $mailer,
-        ?EventDispatcherInterface $eventDispatcher = null
-    ) {
-        $this->router = $router;
+    public function __construct(BlogInterface $blog, PostManagerInterface $postManager, CommentManagerInterface  $commentManager,
+                                MailerInterface $mailer, EventDispatcherInterface $eventDispatcher
+    )
+    {
         $this->blog = $blog;
         $this->postManager = $postManager;
         $this->commentManager = $commentManager;
-        $this->formFactory = $formFactory;
         $this->mailer = $mailer;
         $this->eventDispatcher = $eventDispatcher;
-
-        if (null === $this->eventDispatcher) {
-            @trigger_error(sprintf(
-                'Not providing an event dispatcher to %s is deprecated since sonata-project/news-bundle 3.9',
-                __CLASS__
-            ), \E_USER_DEPRECATED);
-        }
     }
 
     /**
      * @param Request $request
      * @param string $id
      * @return RedirectResponse|Response
-     *@throws NotFoundHttpException
+     * @throws NotFoundHttpException
      */
     public function __invoke(Request $request, string $id): RedirectResponse|Response
     {
@@ -110,32 +91,26 @@ final class CreateCommentAction extends AbstractController
 
         if (!$post->isCommentable()) {
             // todo : add notice in event listener
-            return new RedirectResponse($this->router->generate('sonata_news_view', [
-                'permalink' => $this->blog->getPermalinkGenerator()->generate($post),
+            return new RedirectResponse($this->generateUrl('sonata_news_view',[
+                'permalink' => $this->blog->getPermalinkGenerator()->generate($post)
             ]));
         }
 
         $comment = $this->createComment($post);
 
-        // NEXT_MAJOR: Remove the if code
-        if (null !== $this->eventDispatcher) {
-            $event = new GetResponseCommentEvent($comment, $request);
-            $this->eventDispatcher->dispatch($event, SonataNewsEvents::COMMENT_INITIALIZE);
+        $event = new GetResponseCommentEvent($comment, $request);
+        $this->eventDispatcher->dispatch($event, SonataNewsEvents::COMMENT_INITIALIZE);
 
-            if (null !== $event->getResponse()) {
-                return $event->getResponse();
-            }
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
         }
-
         $form = $this->getCommentForm($comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // NEXT_MAJOR: Remove the if code
-            if (null !== $this->eventDispatcher) {
-                $event = new FormEvent($form, $request);
-                $this->eventDispatcher->dispatch($event, SonataNewsEvents::COMMENT_SUCCESS);
-            }
+
+            $event = new FormEvent($form, $request);
+            $this->eventDispatcher->dispatch($event, SonataNewsEvents::COMMENT_SUCCESS);
 
             $comment = $form->getData();
 
@@ -143,17 +118,13 @@ final class CreateCommentAction extends AbstractController
             $this->mailer->sendCommentNotification($comment);
 
             // todo : add notice in event listener
-            $response = new RedirectResponse($this->router->generate('sonata_news_view', [
-                'permalink' => $this->blog->getPermalinkGenerator()->generate($post),
+            $response = new RedirectResponse($this->generateUrl('sonata_news_view',[
+                'permalink' => $this->blog->getPermalinkGenerator()->generate($post)
             ]));
-
-            // NEXT_MAJOR: Remove the if code
-            if (null !== $this->eventDispatcher) {
-                $this->eventDispatcher->dispatch(
-                    new FilterCommentResponseEvent($comment, $request, $response),
-                    SonataNewsEvents::COMMENT_COMPLETED
-                );
-            }
+            $this->eventDispatcher->dispatch(
+                new FilterCommentResponseEvent($comment, $request, $response),
+                SonataNewsEvents::COMMENT_COMPLETED
+            );
 
             return $response;
         }
@@ -170,11 +141,11 @@ final class CreateCommentAction extends AbstractController
      */
     private function getCommentForm(CommentInterface $comment): FormInterface
     {
-        return $this->formFactory->createNamed('comment', CommentType::class, $comment, [
-            'action' => $this->router->generate('sonata_news_add_comment', [
-                'id' => $comment->getPost()->getId(),
+        return $this->container->get('form.factory')->createNamed('comment', CommentType::class, $comment, [
+            'action' => $this->generateUrl('sonata_news_add_comment',[
+                'id' => $comment->getPost()->getId()
             ]),
-            'method' => 'POST',
+            'method' => 'POST'
         ]);
     }
 

@@ -18,16 +18,10 @@ use Sonata\NewsBundle\Model\{CommentManagerInterface,PostInterface,PostManagerIn
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\{FormFactoryInterface,FormInterface};
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
 
 
 final class CreateCommentFormAction extends AbstractController
 {
-    /**
-     * @var RouterInterface
-     */
-    private RouterInterface $router;
-
     /**
      * @var PostManagerInterface
      */
@@ -43,10 +37,9 @@ final class CreateCommentFormAction extends AbstractController
      */
     private FormFactoryInterface $formFactory;
 
-    public function __construct(RouterInterface $router, PostManagerInterface $postManager,
+    public function __construct(PostManagerInterface $postManager,
         CommentManagerInterface $commentManager, FormFactoryInterface $formFactory)
     {
-        $this->router = $router;
         $this->postManager = $postManager;
         $this->commentManager = $commentManager;
         $this->formFactory = $formFactory;
@@ -85,8 +78,8 @@ final class CreateCommentFormAction extends AbstractController
         $comment->setStatus($post->getCommentsDefaultStatus());
 
         return $this->formFactory->createNamed('comment', CommentType::class, $comment, [
-            'action' => $this->router->generate('sonata_news_add_comment', [
-                'id' => $post->getId(),
+            'action' => $this->generateUrl('sonata_news_add_comment',[
+                'id' => $post->getId()
             ]),
             'method' => 'POST',
         ]);

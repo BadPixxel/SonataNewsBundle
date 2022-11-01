@@ -53,12 +53,10 @@ final class ORMPaginator extends BasePaginator
         if (0 === \count($this->queryBuilder->getDQLPart('join'))) {
             $query->setHint(CountWalker::HINT_DISTINCT, false);
         }
-
         $paginator = new DoctrinePaginator($query, true);
 
         $useOutputWalkers = \count($this->queryBuilder->getDQLPart('having') ?: []) > 0;
         $paginator->setUseOutputWalkers($useOutputWalkers);
-
         $this->results = $paginator->getIterator();
         $this->numResults = $paginator->count();
 
