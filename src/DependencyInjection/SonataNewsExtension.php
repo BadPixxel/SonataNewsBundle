@@ -87,6 +87,7 @@ final class SonataNewsExtension extends Extension
             $config['title'],
             $config['link'],
             $config['description'],
+            $config['logo'],
             new Reference('sonata.news.permalink.generator'),
         ]));
 

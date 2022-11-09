@@ -30,6 +30,11 @@ class Blog implements BlogInterface
     /**
      * @var string
      */
+    protected string $logo;
+
+    /**
+     * @var string
+     */
     protected string $description;
 
     /**
@@ -43,11 +48,13 @@ class Blog implements BlogInterface
      * @param string $description
      * @param PermalinkInterface $permalinkGenerator
      */
-    public function __construct(string $title, string $link, string $description, PermalinkInterface $permalinkGenerator)
+    public function __construct(string $title, string $link, string $description, string $logo,
+                                PermalinkInterface $permalinkGenerator)
     {
         $this->title = $title;
         $this->link = $link;
         $this->description = $description;
+        $this->logo = $logo;
         $this->permalinkGenerator = $permalinkGenerator;
     }
 
@@ -108,5 +115,22 @@ class Blog implements BlogInterface
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    /**
+     * @param string $logo
+     * @return void
+     */
+    public function setLogo(string $logo): void
+    {
+        $this->logo = $logo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogo(): string
+    {
+        return $this->logo;
     }
 }

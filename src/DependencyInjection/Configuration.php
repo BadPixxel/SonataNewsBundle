@@ -41,6 +41,7 @@ final class Configuration implements ConfigurationInterface
                 ->scalarNode('description')->isRequired()->end()
                 ->scalarNode('permalink_generator')->defaultValue('sonata.news.permalink.date')->end()
                 ->scalarNode('salt')->isRequired()->end()
+                ->scalarNode('logo')->defaultValue('')->end()
                 ->arrayNode('permalink')
                     ->addDefaultsIfNotSet()
                     ->children()

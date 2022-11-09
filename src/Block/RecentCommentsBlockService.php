@@ -27,14 +27,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 /**
+ * NEXT MAJOR: replace reference of ManagerInterface by CommentManagerInterface
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 final class RecentCommentsBlockService extends AbstractAdminBlockService
 {
     /**
-     * @var CommentManagerInterface
+     * @var ManagerInterface|CommentManagerInterface
      */
-    protected CommentManagerInterface $manager;
+    protected ManagerInterface|CommentManagerInterface $manager;
 
     /**
      * @var Pool
@@ -44,11 +45,20 @@ final class RecentCommentsBlockService extends AbstractAdminBlockService
     /**
      * @param string $name
      * @param Environment $templating
-     * @param CommentManagerInterface $commentManager
+     * @param ManagerInterface $commentManager
      * @param Pool|null $adminPool
      */
-    public function __construct(string $name, Environment $templating, CommentManagerInterface $commentManager, ?Pool $adminPool = null)
+    public function __construct(string $name, Environment $templating, ManagerInterface $commentManager, ?Pool $adminPool = null)
     {
+        if (!$commentManager instanceof CommentManagerInterface) {
+            @trigger_error(
+                'Calling the '.__METHOD__.' method with a Sonata\Doctrine\Model\ManagerInterface is deprecated'
+                .' since version 2.4 and will be removed in 3.0.'
+                .' Use the new signature with a Sonata\NewsBundle\Model\CommentManagerInterface instead.',
+                \E_USER_DEPRECATED
+            );
+        }
+
         $this->manager = $commentManager;
         $this->adminPool = $adminPool;
 

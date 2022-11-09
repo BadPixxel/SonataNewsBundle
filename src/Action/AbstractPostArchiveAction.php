@@ -67,7 +67,6 @@ abstract class AbstractPostArchiveAction extends AbstractController
             $criteria,
             $request->get('page', 1)
         );
-
         $parameters = array_merge([
             'pager' => $pager,
             'blog' => $this->blog,

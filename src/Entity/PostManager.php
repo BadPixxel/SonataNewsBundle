@@ -69,8 +69,11 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
         if (0 === \count($parameters)) {
             return null;
         }
+
         $query->setParameters($parameters);
-        return $query->getQuery()->getOneOrNullResult();
+
+        $post = $query->getQuery()->enableResultCache()->getOneOrNullResult();
+        return $post;
     }
 
     /**
@@ -176,4 +179,6 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
 
         return $queryParts;
     }
+
 }
+

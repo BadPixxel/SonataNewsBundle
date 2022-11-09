@@ -30,6 +30,11 @@ interface BlogInterface
     /**
      * @return string
      */
+    public function getLogo(): string;
+
+    /**
+     * @return string
+     */
     public function getDescription(): string;
 
     /**
@@ -41,6 +46,12 @@ interface BlogInterface
      * @param string $link
      */
     public function setLink(string $link);
+
+    /**
+     * @param string $logo
+     * @return mixed
+     */
+    public function setLogo(string $logo);
 
     /**
      * @param string $description
