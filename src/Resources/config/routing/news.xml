@@ -20,7 +20,7 @@
     </route>
     <route id="sonata_news_tag" path="/tag/{tag}.{_format}" methods="GET">
         <default key="_controller">Sonata\NewsBundle\Action\TagPostArchiveAction</default>
-        <default key="_format">xml</default>
+        <default key="_format">html</default>
         <requirement key="_format">html|rss|xml</requirement>
     </route>
     <route id="sonata_news_collection" path="/collection/{collection}.{_format}" methods="GET">
