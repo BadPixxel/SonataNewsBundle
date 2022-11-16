@@ -50,7 +50,6 @@ final class ORMPaginator extends BasePaginator
             ->setMaxResults($this->pageSize)
             ->getQuery();
         $query->enableResultCache();
-
         if (0 === \count($this->queryBuilder->getDQLPart('join'))) {
             $query->setHint(CountWalker::HINT_DISTINCT, false);
         }
@@ -62,7 +61,6 @@ final class ORMPaginator extends BasePaginator
 
         $this->results = $paginator->getIterator();
         $this->numResults = $paginator->count();
-
         return $this;
     }
 }

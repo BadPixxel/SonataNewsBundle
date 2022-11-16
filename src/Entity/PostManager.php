@@ -30,7 +30,7 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
      */
     public function findOneByPermalink(string $permalink, BlogInterface $blog) : ?PostInterface
     {
-        $query = $this->getRepository()->createQueryBuilder('p');
+        $query = $this->getRepository()->createQueryBuilder('p')->select('p, t');
 
         try {
             $urlParameters = $blog->getPermalinkGenerator()->getParameters($permalink);
@@ -55,7 +55,7 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
             $query->andWhere('p.slug = :slug');
             $parameters['slug'] = $urlParameters['slug'];
         }
-
+        $query->leftJoin('p.tags', 't', Join::WITH, 't.enabled = true');
         if (isset($urlParameters['collection'])) {
             $collectionQueryParts = $this->getPublicationCollectionQueryParts($urlParameters['collection']);
 
@@ -71,7 +71,6 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
         }
 
         $query->setParameters($parameters);
-
         $post = $query->getQuery()->enableResultCache()->getOneOrNullResult();
         return $post;
     }
@@ -158,7 +157,6 @@ class PostManager extends BaseEntityManager implements PostManagerInterface
         }
 
         $query->setParameters($parameters);
-
         return (new ORMPaginator($query))->paginate(intval($page));
     }
 

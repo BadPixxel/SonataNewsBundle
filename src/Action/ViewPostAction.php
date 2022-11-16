@@ -77,8 +77,6 @@ final class ViewPostAction extends AbstractController
         if (!$post || !$this->isVisible($post)) {
             throw new NotFoundHttpException('Unable to find the post');
         }
-
-        $post->setTags($this->getTags($post->getId()));
         if ($seoPage = $this->seoPage) {
             $seoPage
                 ->addTitle($post->getTitle())
