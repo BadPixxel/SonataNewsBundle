@@ -65,7 +65,7 @@ abstract class AbstractPostArchiveAction extends AbstractController
     {
         $pager = $this->postManager->getPaginator(
             $criteria,
-            $request->get('page', 1)
+            (int)$request->get('page', 1)
         );
         $parameters = array_merge([
             'pager' => $pager,
