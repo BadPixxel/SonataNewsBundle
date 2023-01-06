@@ -47,7 +47,7 @@
         "symfony/security-core": "^5.1 || ^6.1",
         "symfony/templating": "^5.1 || ^6.1",
         "symfony/translation-contracts": "^2.5.2 || ^3.0.0",
-        "symfony/twig-bundle": "^6.1",
+        "symfony/twig-bundle": "^5.1 || ^6.1",
         "twig/string-extra": "^3.4",
         "twig/twig": "^2.15.3 || ^3.0.0"
     },
