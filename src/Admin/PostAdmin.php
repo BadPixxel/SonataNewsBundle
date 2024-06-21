@@ -132,7 +132,7 @@ class PostAdmin extends AbstractAdmin
                     'attr' => ['rows' => 5],
                 ])
                 ->add('content', FormatterType::class, [
-                    //'event_dispatcher' => $form->getFormBuilder()->getEventDispatcher(),
+                    'event_dispatcher' => $form->getFormBuilder()->getEventDispatcher(),
                     'format_field' => 'contentFormatter',
                     'source_field' => 'rawContent',
                     'source_field_options' => [

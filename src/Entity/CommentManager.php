@@ -65,12 +65,14 @@ class CommentManager extends BaseEntityManager implements CommentManagerInterfac
             return;
         }
 
-        $this->getConnection()->beginTransaction();
-        $this->getConnection()->query($this->getCommentsCountResetQuery($postTable->table['name']));
+        $em = $this->getEntityManager();
 
-        $this->getConnection()->query($this->getCommentsCountQuery($postTable->table['name'], $commentTable->table['name']));
+        $em->getConnection()->beginTransaction();
+        $em->getConnection()->executeQuery($this->getCommentsCountResetQuery($postTable->table['name']));
 
-        $this->getConnection()->commit();
+        $em->getConnection()->executeQuery($this->getCommentsCountQuery($postTable->table['name'], $commentTable->table['name']));
+
+        $em->getConnection()->commit();
     }
 
     /**

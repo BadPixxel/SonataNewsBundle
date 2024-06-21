@@ -239,7 +239,7 @@ interface PostInterface
      *
      * @return int $commentsCount
      */
-    public function getCommentsCount(): int;
+    public function getCommentsCount(): ?int;
 
     /**
      * @return bool

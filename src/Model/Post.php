@@ -100,7 +100,7 @@ abstract class Post implements PostInterface
     /**
      * @var int
      */
-    protected int $commentsCount = 0;
+    protected ?int $commentsCount = 0;
 
     /**
      * @var UserInterface|null
@@ -439,7 +439,7 @@ abstract class Post implements PostInterface
     /**
      * @return int
      */
-    public function getCommentsCount(): int
+    public function getCommentsCount(): ?int
     {
         return $this->commentsCount;
     }
